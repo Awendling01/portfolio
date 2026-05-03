@@ -1,36 +1,43 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# andrewwendling.dev
 
-## Getting Started
+Personal portfolio site. Next.js 16 (App Router, Turbopack) + Tailwind v4 + TypeScript, deployed to Vercel.
 
-First, run the development server:
+## Stack
+
+- **Framework**: Next.js 16
+- **Styling**: Tailwind CSS v4 (CSS-first config)
+- **Fonts**: Outfit + Fira Code (next/font/google)
+- **Deployment**: Vercel
+- **Domain**: andrewwendling.dev
+
+Phase 2 (planned): Neon Postgres + Drizzle for view counter and contact-form storage, Resend for transactional email, GitHub GraphQL for pinned repos, Spotify now-playing widget, MDX blog.
+
+## Run
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+src/
+  app/            App Router pages (/, /work, /about, /contact)
+  components/
+    layout/       Nav, Footer
+    ui/           Button, Card, Badge, Container, etc.
+    projects/     ProjectCard
+    sales/        SalesSection, SalesCard
+    sections/     TwoCareers
+  lib/
+    content.ts    Single source of truth — projects, sales, skills, contact
+```
 
-## Learn More
+## Editing content
 
-To learn more about Next.js, take a look at the following resources:
+All copy lives in `src/lib/content.ts`. Edit there.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+See `CLAUDE.md` for accuracy guardrails — particularly around prior roles.
