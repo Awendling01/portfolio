@@ -63,7 +63,7 @@ export default function ProjectCard({ project, variant = "full" }: Props) {
         </div>
       ) : null}
 
-      <div className="mt-6 pt-5 border-t border-[var(--border)]/70 mt-auto">
+      <div className="mt-auto pt-5 border-t border-[var(--border)]/70">
         <TechTags items={project.tech} />
       </div>
     </Card>

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Suspense } from "react";
 import Container from "@/components/ui/Container";
 import Button from "@/components/ui/Button";
 import StatBar from "@/components/ui/StatBar";
@@ -6,6 +7,7 @@ import SectionHeader from "@/components/ui/SectionHeader";
 import ScrollReveal from "@/components/ui/ScrollReveal";
 import ProjectCard from "@/components/projects/ProjectCard";
 import TwoCareers from "@/components/sections/TwoCareers";
+import GitHubRepos from "@/components/integrations/GitHubRepos";
 import { projects, heroStats, contact } from "@/lib/content";
 
 const featured = projects.filter((p) => p.featured);
@@ -103,6 +105,30 @@ export default function Home() {
           </ScrollReveal>
           <ScrollReveal>
             <TwoCareers />
+          </ScrollReveal>
+        </Container>
+      </section>
+
+      {/* GitHub */}
+      <section className="py-20 sm:py-24">
+        <Container>
+          <ScrollReveal>
+            <SectionHeader
+              tag="On GitHub"
+              title="Pinned repositories"
+              subtitle="Live from the GitHub GraphQL API. Cached hourly."
+            />
+          </ScrollReveal>
+          <ScrollReveal>
+            <Suspense
+              fallback={
+                <div className="mono text-xs uppercase tracking-[0.18em] text-[var(--text)]">
+                  Loading repositories…
+                </div>
+              }
+            >
+              <GitHubRepos />
+            </Suspense>
           </ScrollReveal>
         </Container>
       </section>
