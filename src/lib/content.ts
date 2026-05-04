@@ -362,6 +362,83 @@ export const contact = {
   githubHandle: "github.com/Awendling01",
 };
 
+export type UsesGroup = {
+  category: string;
+  blurb: string;
+  items: { name: string; note?: string }[];
+};
+
+export const uses: UsesGroup[] = [
+  {
+    category: "Editor & Terminal",
+    blurb: "Where I spend most of the day.",
+    items: [
+      { name: "VS Code", note: "primary editor; Vim keybindings" },
+      { name: "Claude Code (CLI)", note: "AI pair programmer + agent harness" },
+      { name: "iTerm2 + zsh", note: "with starship prompt" },
+      { name: "Tmux", note: "session-per-project" },
+    ],
+  },
+  {
+    category: "Languages & Frameworks",
+    blurb: "What I'm shipping production code in today.",
+    items: [
+      { name: "Laravel 12 + PHP 8.3" },
+      { name: "Vue 3 (Composition API) + Inertia.js" },
+      { name: "Next.js 16 + React 19 + TypeScript" },
+      { name: "Tailwind CSS v4" },
+      { name: "Pest / PHPUnit / Cypress" },
+    ],
+  },
+  {
+    category: "Platforms & APIs",
+    blurb: "Integrations I've shipped to production.",
+    items: [
+      { name: "Stripe", note: "Billing, Connect" },
+      { name: "Plaid", note: "Auth, Link" },
+      { name: "Twilio", note: "two-way SMS, webhooks" },
+      { name: "Shopify", note: "Admin GraphQL, Headless checkout" },
+      { name: "Klaviyo", note: "automation flows" },
+      { name: "OpenAI + Anthropic", note: "image gen, agentic features" },
+      { name: "Replicate + Claid.ai", note: "background removal, upscaling" },
+    ],
+  },
+  {
+    category: "Data & Infra",
+    blurb: "Where the data lives.",
+    items: [
+      { name: "MySQL", note: "primary OLTP for Laravel apps" },
+      { name: "PostgreSQL (Neon)", note: "serverless Postgres on Vercel" },
+      { name: "Drizzle ORM", note: "type-safe Postgres for Next.js" },
+      { name: "Redis", note: "queues, caching" },
+      { name: "Laravel Horizon", note: "queue monitoring" },
+      { name: "Reverb", note: "WebSocket broadcasting" },
+    ],
+  },
+  {
+    category: "Workflow",
+    blurb: "Tools I default to without thinking.",
+    items: [
+      { name: "Git + GitHub", note: "trunk-based, PR-driven" },
+      { name: "Bitbucket Pipelines + GitHub Actions", note: "CI/CD" },
+      { name: "Vercel", note: "Next.js deploys, blob storage" },
+      { name: "Sentry", note: "error monitoring" },
+      { name: "Postman", note: "API exploration" },
+      { name: "Figma", note: "design hand-offs" },
+      { name: "Jira / Linear", note: "wherever the team lives" },
+    ],
+  },
+  {
+    category: "Hardware",
+    blurb: "Daily driver.",
+    items: [
+      { name: "MacBook Pro (Apple Silicon)" },
+      { name: "External 4K display" },
+      { name: "Mechanical keyboard" },
+    ],
+  },
+];
+
 export const heroStats = [
   { value: "5+", label: "Years Engineering", color: "accent" as const },
   { value: "6+", label: "Years Sales", color: "accent2" as const },

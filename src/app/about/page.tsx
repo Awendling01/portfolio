@@ -105,6 +105,15 @@ export default function AboutPage() {
                     {contact.phone}
                   </a>
                 </div>
+                <div className="pt-3 border-t border-[var(--border)]/70">
+                  <a
+                    href="/resume.pdf"
+                    download
+                    className="text-[var(--accent)] hover:underline"
+                  >
+                    Download resume (PDF) →
+                  </a>
+                </div>
               </aside>
             </div>
           </ScrollReveal>
