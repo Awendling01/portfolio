@@ -47,7 +47,7 @@ export async function getPinnedRepos(): Promise<PinnedRepo[]> {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
-        "User-Agent": "andrewwendling.dev",
+        "User-Agent": "andrewwendling.info",
       },
       body: JSON.stringify({
         query: QUERY,

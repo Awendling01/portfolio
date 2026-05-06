@@ -48,7 +48,7 @@ export default async function OpenGraphImage() {
               fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace",
             }}
           >
-            andrewwendling.dev
+            andrewwendling.info
           </div>
         </div>
 

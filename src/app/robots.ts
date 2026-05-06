@@ -3,6 +3,6 @@ import type { MetadataRoute } from "next";
 export default function robots(): MetadataRoute.Robots {
   return {
     rules: { userAgent: "*", allow: "/", disallow: "/api/" },
-    sitemap: "https://andrewwendling.dev/sitemap.xml",
+    sitemap: "https://andrewwendling.info/sitemap.xml",
   };
 }

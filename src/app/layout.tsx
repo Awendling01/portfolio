@@ -20,7 +20,7 @@ const firaCode = Fira_Code({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://andrewwendling.dev"),
+  metadataBase: new URL("https://andrewwendling.info"),
   title: {
     default: "Andrew Wendling — Full-Stack Engineer + Sales Background",
     template: "%s | Andrew Wendling",
@@ -48,7 +48,7 @@ export const metadata: Metadata = {
     title: "Andrew Wendling — Full-Stack Engineer + Sales Background",
     description:
       "Software engineer + sales leader. Building toward Solutions Engineering.",
-    url: "https://andrewwendling.dev",
+    url: "https://andrewwendling.info",
     siteName: "Andrew Wendling",
     locale: "en_US",
     type: "website",
