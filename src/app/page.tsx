@@ -25,12 +25,10 @@ export default function Home() {
             </span>
 
             <h1 className="mt-6 text-[40px] leading-[1.05] sm:text-[64px] sm:leading-[1.04] font-extrabold tracking-[-0.025em] text-white">
-              I build the systems,
+              Six years selling. Five years building.
               <br />
-              then{" "}
-              <span className="shimmer">show people how to win</span>{" "}
-              <br className="hidden sm:block" />
-              with them.
+              Engineer who can{" "}
+              <span className="shimmer">carry a quota</span>.
             </h1>
 
             <p className="mt-7 text-base sm:text-lg text-[var(--text)] max-w-2xl leading-relaxed">
