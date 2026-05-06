@@ -60,22 +60,29 @@ export default async function OpenGraphImage() {
               lineHeight: 1.04,
               letterSpacing: "-0.025em",
               color: "#f1f5f9",
-              maxWidth: 1000,
+              maxWidth: 1080,
               display: "flex",
-              flexWrap: "wrap",
+              flexDirection: "column",
+              gap: 8,
             }}
           >
-            <span>I build the systems, then&nbsp;</span>
-            <span
-              style={{
-                background: "linear-gradient(90deg, #38bdf8, #818cf8, #34d399)",
-                backgroundClip: "text",
-                color: "transparent",
-              }}
-            >
-              show people how to win
-            </span>
-            <span>&nbsp;with them.</span>
+            <div style={{ display: "flex" }}>
+              Six years selling. Five years building.
+            </div>
+            <div style={{ display: "flex", flexWrap: "wrap" }}>
+              <span>Engineer who can&nbsp;</span>
+              <span
+                style={{
+                  background:
+                    "linear-gradient(90deg, #38bdf8, #818cf8, #34d399)",
+                  backgroundClip: "text",
+                  color: "transparent",
+                }}
+              >
+                carry a quota
+              </span>
+              <span>.</span>
+            </div>
           </div>
           <div
             style={{
@@ -86,8 +93,8 @@ export default async function OpenGraphImage() {
               display: "flex",
             }}
           >
-            Andrew Wendling — Full-stack engineer (5+ yrs) + sales leader (6+
-            yrs). Open to Developer · Solutions Engineer · Sales Engineer · CSM.
+            Andrew Wendling. Open to Developer · Solutions Engineer · Sales
+            Engineer · Customer Success Manager roles.
           </div>
         </div>
 
