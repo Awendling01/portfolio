@@ -54,7 +54,7 @@ export default function ContactMessageEmail({ name, email, message }: Props) {
             New message from your portfolio
           </Heading>
           <Text style={{ color: "#94a3b8", fontSize: 13, margin: 0 }}>
-            Sent via the andrewwendling.dev contact form.
+            Sent via the andrewwendling.info contact form.
           </Text>
 
           <Hr
