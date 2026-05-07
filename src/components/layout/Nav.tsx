@@ -73,7 +73,7 @@ export default function Nav() {
           })}
           <Link
             href="/contact"
-            className="ml-2 inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium rounded-full bg-gradient-to-r from-[var(--accent)] to-[var(--accent2)] text-[#0b1224] hover:-translate-y-[1px] transition-transform"
+            className="ml-2 inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium rounded-full bg-gradient-to-r from-[var(--accent)] to-[var(--accent2)] text-[#0b1224] whitespace-nowrap hover:-translate-y-[1px] transition-transform"
           >
             Hire me
           </Link>

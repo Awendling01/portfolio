@@ -95,7 +95,7 @@ export default function ContactPage() {
             <a
               href="/resume.pdf"
               download
-              className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-full font-medium text-sm border border-[var(--border2)] text-[var(--text2)] hover:border-[var(--accent)] hover:text-white hover:-translate-y-[1px] transition-all duration-200"
+              className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-full font-medium text-sm border border-[var(--border2)] text-[var(--text2)] whitespace-nowrap shrink-0 hover:border-[var(--accent)] hover:text-white hover:-translate-y-[1px] transition-all duration-200"
             >
               Download resume (PDF) →
             </a>

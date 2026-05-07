@@ -229,7 +229,7 @@ export default function ContactForm() {
         <button
           type="submit"
           disabled={pending}
-          className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-full font-medium text-sm bg-gradient-to-r from-[var(--accent)] to-[var(--accent2)] text-[#0b1224] transition disabled:opacity-60 disabled:cursor-not-allowed hover:-translate-y-[1px]"
+          className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-full font-medium text-sm bg-gradient-to-r from-[var(--accent)] to-[var(--accent2)] text-[#0b1224] whitespace-nowrap shrink-0 transition disabled:opacity-60 disabled:cursor-not-allowed hover:-translate-y-[1px]"
         >
           {pending ? "Sending…" : "Send message"}
         </button>
