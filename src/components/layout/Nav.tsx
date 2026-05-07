@@ -72,8 +72,14 @@ export default function Nav() {
             );
           })}
           <Link
+            href="/login"
+            className="ml-2 px-3 py-2 text-sm font-medium rounded-md text-[var(--text)] hover:text-white transition-colors"
+          >
+            Login
+          </Link>
+          <Link
             href="/contact"
-            className="ml-2 inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium rounded-full bg-gradient-to-r from-[var(--accent)] to-[var(--accent2)] text-[#0b1224] whitespace-nowrap hover:-translate-y-[1px] transition-transform"
+            className="ml-1 inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium rounded-full bg-gradient-to-r from-[var(--accent)] to-[var(--accent2)] text-[#0b1224] whitespace-nowrap hover:-translate-y-[1px] transition-transform"
           >
             Hire me
           </Link>
@@ -128,6 +134,13 @@ export default function Nav() {
                 </Link>
               );
             })}
+            <Link
+              href="/login"
+              onClick={closeMenu}
+              className="px-3 py-3 text-sm font-medium rounded-md text-[var(--text)] border-t border-[var(--border)]/50 mt-1 pt-3"
+            >
+              Login
+            </Link>
           </Container>
         </div>
       ) : null}
