@@ -1,17 +1,37 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import { submitContact } from "@/app/contact/actions";
 import {
   initialContactState,
   type ContactState,
 } from "@/app/contact/state";
+import {
+  ContactFieldNames,
+  validateField,
+  type ContactFieldName,
+} from "@/app/contact/schema";
 
 const inputClass =
-  "w-full rounded-lg border border-[var(--border)] bg-[var(--bg)]/60 px-4 py-3 text-[15px] text-[var(--text2)] placeholder:text-[var(--text)]/70 outline-none transition focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/30";
+  "w-full rounded-lg border bg-[var(--bg)]/60 px-4 py-3 text-[15px] text-[var(--text2)] placeholder:text-[var(--text)]/70 outline-none transition focus:ring-2";
+
+const inputOk =
+  "border-[var(--border)] focus:border-[var(--accent)] focus:ring-[var(--accent)]/30";
+
+const inputError =
+  "border-[var(--rose)]/70 focus:border-[var(--rose)] focus:ring-[var(--rose)]/25";
 
 const labelClass =
   "mono text-[11px] uppercase tracking-[0.18em] text-[var(--text)]";
+
+type FieldErrors = Partial<Record<ContactFieldName, string>>;
+type Touched = Partial<Record<ContactFieldName, boolean>>;
+
+const emptyValues: Record<ContactFieldName, string> = {
+  name: "",
+  email: "",
+  message: "",
+};
 
 export default function ContactForm() {
   const [state, formAction, pending] = useActionState<ContactState, FormData>(
@@ -19,14 +39,79 @@ export default function ContactForm() {
     initialContactState,
   );
 
+  const [values, setValues] = useState<Record<ContactFieldName, string>>(
+    emptyValues,
+  );
+  const [errors, setErrors] = useState<FieldErrors>({});
+  const [touched, setTouched] = useState<Touched>({});
+
+  // React the action result during render (instead of in an effect).
+  // Using a stored copy of the state we've already reacted to so we only
+  // do the reset / merge once per server response.
+  // https://react.dev/learn/you-might-not-need-an-effect#adjusting-some-state-when-a-prop-changes
+  const [seenState, setSeenState] = useState(state);
+  if (state !== seenState) {
+    setSeenState(state);
+    if (state.status === "success") {
+      setValues(emptyValues);
+      setErrors({});
+      setTouched({});
+    } else if (state.status === "error" && state.errors) {
+      setErrors((prev) => ({ ...prev, ...state.errors }));
+      const newlyTouched: Touched = {};
+      for (const name of ContactFieldNames) {
+        if (state.errors[name]) newlyTouched[name] = true;
+      }
+      setTouched((prev) => ({ ...prev, ...newlyTouched }));
+    }
+  }
+
+  const handleChange =
+    (name: ContactFieldName) =>
+    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      const next = e.target.value;
+      setValues((prev) => ({ ...prev, [name]: next }));
+      // Clear the field's error as soon as the user starts editing — they're
+      // already correcting whatever was wrong.
+      if (errors[name]) {
+        setErrors((prev) => ({ ...prev, [name]: undefined }));
+      }
+    };
+
+  const handleBlur = (name: ContactFieldName) => () => {
+    setTouched((prev) => ({ ...prev, [name]: true }));
+    const issue = validateField(name, values[name]);
+    setErrors((prev) => ({ ...prev, [name]: issue }));
+  };
+
+  const showError = (name: ContactFieldName) =>
+    Boolean(touched[name] && errors[name]);
+
+  const errorClassFor = (name: ContactFieldName) =>
+    `${inputClass} ${showError(name) ? inputError : inputOk}`;
+
+  const statusToneClass =
+    state.status === "success"
+      ? "text-[var(--green)]"
+      : state.status === "error"
+        ? "text-[var(--rose)]"
+        : "text-[var(--text)]";
+
+  const statusMessage =
+    state.message ||
+    "Replies usually come from the address above within a business day.";
+
   return (
     <form
       action={formAction}
       noValidate
       className="rounded-2xl border border-[var(--border)] bg-[var(--surface)]/80 p-7 sm:p-8 space-y-5"
     >
-      {/* honeypot */}
-      <div className="absolute -left-[9999px] top-auto w-px h-px overflow-hidden" aria-hidden="true">
+      {/* honeypot — visually hidden, off-screen, hidden from assistive tech */}
+      <div
+        className="absolute -left-[9999px] top-auto w-px h-px overflow-hidden"
+        aria-hidden="true"
+      >
         <label htmlFor="website">Website</label>
         <input
           id="website"
@@ -52,17 +137,20 @@ export default function ContactForm() {
             maxLength={120}
             autoComplete="name"
             placeholder="Your name"
-            aria-invalid={Boolean(state.errors?.name)}
-            aria-describedby={state.errors?.name ? "name-error" : undefined}
-            className={inputClass}
+            value={values.name}
+            onChange={handleChange("name")}
+            onBlur={handleBlur("name")}
+            aria-invalid={showError("name")}
+            aria-describedby={showError("name") ? "name-error" : undefined}
+            className={errorClassFor("name")}
           />
-          {state.errors?.name ? (
+          {showError("name") ? (
             <p
               id="name-error"
               className="text-xs text-[var(--rose)]"
               aria-live="polite"
             >
-              {state.errors.name}
+              {errors.name}
             </p>
           ) : null}
         </div>
@@ -79,17 +167,20 @@ export default function ContactForm() {
             maxLength={200}
             autoComplete="email"
             placeholder="you@company.com"
-            aria-invalid={Boolean(state.errors?.email)}
-            aria-describedby={state.errors?.email ? "email-error" : undefined}
-            className={inputClass}
+            value={values.email}
+            onChange={handleChange("email")}
+            onBlur={handleBlur("email")}
+            aria-invalid={showError("email")}
+            aria-describedby={showError("email") ? "email-error" : undefined}
+            className={errorClassFor("email")}
           />
-          {state.errors?.email ? (
+          {showError("email") ? (
             <p
               id="email-error"
               className="text-xs text-[var(--rose)]"
               aria-live="polite"
             >
-              {state.errors.email}
+              {errors.email}
             </p>
           ) : null}
         </div>
@@ -107,36 +198,32 @@ export default function ContactForm() {
           maxLength={5000}
           rows={6}
           placeholder="Role, team, what you're hiring for, timeline — whatever helps."
-          aria-invalid={Boolean(state.errors?.message)}
+          value={values.message}
+          onChange={handleChange("message")}
+          onBlur={handleBlur("message")}
+          aria-invalid={showError("message")}
           aria-describedby={
-            state.errors?.message ? "message-error" : undefined
+            showError("message") ? "message-error" : undefined
           }
-          className={`${inputClass} resize-y`}
+          className={`${errorClassFor("message")} resize-y`}
         />
-        {state.errors?.message ? (
+        {showError("message") ? (
           <p
             id="message-error"
             className="text-xs text-[var(--rose)]"
             aria-live="polite"
           >
-            {state.errors.message}
+            {errors.message}
           </p>
         ) : null}
       </div>
 
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-1">
         <p
-          className={`text-sm leading-relaxed ${
-            state.status === "success"
-              ? "text-[var(--green)]"
-              : state.status === "error"
-                ? "text-[var(--rose)]"
-                : "text-[var(--text)]"
-          }`}
+          className={`text-sm leading-relaxed ${statusToneClass}`}
           aria-live="polite"
         >
-          {state.message ||
-            "Replies usually come from the address above within a business day."}
+          {statusMessage}
         </p>
 
         <button

@@ -15,11 +15,7 @@ export default function SectionHeader({
   return (
     <div className={`max-w-2xl mb-12 ${alignment}`}>
       {tag ? (
-        <div
-          className={`mono text-[11px] uppercase tracking-[0.2em] text-[var(--accent)] mb-3 ${
-            align === "center" ? "" : ""
-          }`}
-        >
+        <div className="mono text-[11px] uppercase tracking-[0.2em] text-[var(--accent)] mb-3">
           {tag}
         </div>
       ) : null}
