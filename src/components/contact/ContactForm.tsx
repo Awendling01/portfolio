@@ -1,11 +1,11 @@
 "use client";
 
 import { useActionState } from "react";
+import { submitContact } from "@/app/contact/actions";
 import {
-  submitContact,
   initialContactState,
   type ContactState,
-} from "@/app/contact/actions";
+} from "@/app/contact/state";
 
 const inputClass =
   "w-full rounded-lg border border-[var(--border)] bg-[var(--bg)]/60 px-4 py-3 text-[15px] text-[var(--text2)] placeholder:text-[var(--text)]/70 outline-none transition focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/30";
