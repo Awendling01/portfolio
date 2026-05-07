@@ -1,41 +1,28 @@
 "use server";
 
 import { Resend } from "resend";
-import { z } from "zod";
 import { getDb, hasDatabase, schema } from "@/lib/db";
 import ContactMessageEmail from "@/emails/ContactMessage";
 import { contact } from "@/lib/content";
+import { ContactSchema } from "./schema";
 import type { ContactState } from "./state";
-
-const ContactSchema = z.object({
-  name: z
-    .string()
-    .trim()
-    .min(2, "Name must be at least 2 characters.")
-    .max(120, "Name is too long."),
-  email: z
-    .string()
-    .trim()
-    .email("Please enter a valid email address.")
-    .max(200, "Email is too long."),
-  message: z
-    .string()
-    .trim()
-    .min(10, "Message must be at least 10 characters.")
-    .max(5000, "Message is too long."),
-  // honeypot - must be empty
-  website: z.string().max(0, "Spam detected.").optional(),
-});
 
 export async function submitContact(
   _prev: ContactState,
   formData: FormData,
 ): Promise<ContactState> {
+  const honeypot = String(formData.get("website") ?? "").trim();
+  if (honeypot.length > 0) {
+    // Spam bot tripped the honeypot. Return the same UI as a real success
+    // — don't reveal the trap, don't persist, don't email.
+    return successState();
+  }
+
   const parsed = ContactSchema.safeParse({
     name: formData.get("name") ?? "",
     email: formData.get("email") ?? "",
     message: formData.get("message") ?? "",
-    website: formData.get("website") ?? "",
+    website: honeypot,
   });
 
   if (!parsed.success) {
@@ -61,10 +48,7 @@ export async function submitContact(
       console.error("contact: db insert failed", err);
       return {
         status: "error",
-        message:
-          "We couldn't save your message right now. Please email " +
-          contact.email +
-          " directly.",
+        message: `We couldn't save your message right now. Please email ${contact.email} directly.`,
       };
     }
   }
@@ -91,12 +75,12 @@ export async function submitContact(
     }
   }
 
-  return {
-    status: "success",
-    message:
-      "Thanks — your message is in. I'll reply within a business day from " +
-      contact.email +
-      ".",
-  };
+  return successState();
 }
 
+function successState(): ContactState {
+  return {
+    status: "success",
+    message: `Thanks — your message is in. I'll reply within a business day from ${contact.email}.`,
+  };
+}
