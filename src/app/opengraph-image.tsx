@@ -66,9 +66,8 @@ export default async function OpenGraphImage() {
               gap: 8,
             }}
           >
-            <div style={{ display: "flex" }}>
-              Six years selling. Five years building.
-            </div>
+            <div style={{ display: "flex" }}>Five years building.</div>
+            <div style={{ display: "flex" }}>Six years selling.</div>
             <div style={{ display: "flex", flexWrap: "wrap" }}>
               <span>Engineer who can&nbsp;</span>
               <span

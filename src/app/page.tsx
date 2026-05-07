@@ -25,7 +25,9 @@ export default function Home() {
             </span>
 
             <h1 className="mt-6 text-[40px] leading-[1.05] sm:text-[64px] sm:leading-[1.04] font-extrabold tracking-[-0.025em] text-white">
-              Six years selling. Five years building.
+              Five years building.
+              <br />
+              Six years selling.
               <br />
               Engineer who can{" "}
               <span className="shimmer">carry a quota</span>.
