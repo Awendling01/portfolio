@@ -72,7 +72,7 @@ export default function Home() {
           <ScrollReveal>
             <SectionHeader
               tag="Selected Work"
-              title="Production projects across SaaS, contract, and full-time roles"
+              title="Recent projects across SaaS, contract, and full-time roles"
               subtitle="A snapshot of recent work — full case studies on the work page."
             />
           </ScrollReveal>

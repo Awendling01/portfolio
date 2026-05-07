@@ -4,22 +4,28 @@ import { useEffect, useState } from "react";
 
 type Props = {
   slug: string;
+  path?: string;
   className?: string;
 };
 
 const formatter = new Intl.NumberFormat("en-US");
 
-export default function ViewCounter({ slug, className }: Props) {
+export default function ViewCounter({ slug, path, className }: Props) {
   const [count, setCount] = useState<number | null>(null);
   const [available, setAvailable] = useState(true);
 
   useEffect(() => {
     let cancelled = false;
 
+    const referrer =
+      typeof document !== "undefined" && document.referrer
+        ? document.referrer
+        : null;
+
     fetch("/api/views", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ slug }),
+      body: JSON.stringify({ slug, path, referrer }),
     })
       .then(async (res) => {
         if (!res.ok) throw new Error("bad response");
@@ -38,7 +44,7 @@ export default function ViewCounter({ slug, className }: Props) {
     return () => {
       cancelled = true;
     };
-  }, [slug]);
+  }, [slug, path]);
 
   if (!available) return null;
 
