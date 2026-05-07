@@ -370,13 +370,11 @@ export type UsesGroup = {
 
 export const uses: UsesGroup[] = [
   {
-    category: "Editor & Terminal",
+    category: "Editor",
     blurb: "Where I spend most of the day.",
     items: [
-      { name: "VS Code", note: "primary editor; Vim keybindings" },
+      { name: "VS Code", note: "primary editor" },
       { name: "Claude Code (CLI)", note: "AI pair programmer + agent harness" },
-      { name: "iTerm2 + zsh", note: "with starship prompt" },
-      { name: "Tmux", note: "session-per-project" },
     ],
   },
   {
@@ -426,15 +424,6 @@ export const uses: UsesGroup[] = [
       { name: "Postman", note: "API exploration" },
       { name: "Figma", note: "design hand-offs" },
       { name: "Jira / Linear", note: "wherever the team lives" },
-    ],
-  },
-  {
-    category: "Hardware",
-    blurb: "Daily driver.",
-    items: [
-      { name: "MacBook Pro (Apple Silicon)" },
-      { name: "External 4K display" },
-      { name: "Mechanical keyboard" },
     ],
   },
 ];
