@@ -5,12 +5,7 @@ import { z } from "zod";
 import { getDb, hasDatabase, schema } from "@/lib/db";
 import ContactMessageEmail from "@/emails/ContactMessage";
 import { contact } from "@/lib/content";
-
-export type ContactState = {
-  status: "idle" | "success" | "error";
-  message: string;
-  errors?: Partial<Record<"name" | "email" | "message", string>>;
-};
+import type { ContactState } from "./state";
 
 const ContactSchema = z.object({
   name: z
@@ -105,7 +100,3 @@ export async function submitContact(
   };
 }
 
-export const initialContactState: ContactState = {
-  status: "idle",
-  message: "",
-};
