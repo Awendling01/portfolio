@@ -1,6 +1,7 @@
 "use server";
 
 import { Resend } from "resend";
+import { z } from "zod";
 import { getDb, hasDatabase, schema } from "@/lib/db";
 import ContactMessageEmail from "@/emails/ContactMessage";
 import { contact } from "@/lib/content";
@@ -26,14 +27,14 @@ export async function submitContact(
   });
 
   if (!parsed.success) {
-    const flat = parsed.error.flatten().fieldErrors;
+    const { fieldErrors } = z.flattenError(parsed.error);
     return {
       status: "error",
       message: "Please fix the highlighted fields and try again.",
       errors: {
-        name: flat.name?.[0],
-        email: flat.email?.[0],
-        message: flat.message?.[0],
+        name: fieldErrors.name?.[0],
+        email: fieldErrors.email?.[0],
+        message: fieldErrors.message?.[0],
       },
     };
   }
@@ -62,7 +63,9 @@ export async function submitContact(
       const resend = new Resend(apiKey);
       const { error } = await resend.emails.send({
         from: fromAddress,
-        to: contact.email,
+        // Resend does a case-sensitive recipient check; lowercase to match
+        // the address as registered with the Resend account.
+        to: contact.email.toLowerCase(),
         replyTo: email,
         subject: `Portfolio message from ${name}`,
         react: ContactMessageEmail({ name, email, message }),
