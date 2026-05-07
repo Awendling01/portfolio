@@ -11,15 +11,14 @@ type Props = {
 } & Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "href">;
 
 const baseStyles =
-  "inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-medium tracking-tight transition-all duration-200 will-change-transform";
+  "inline-flex items-center justify-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium tracking-tight transition-all duration-200 will-change-transform";
 
 const variantStyles: Record<Variant, string> = {
   primary:
-    "bg-gradient-to-r from-[var(--accent)] to-[var(--accent2)] text-[#0b1224] shadow-[0_10px_30px_-10px_rgba(56,189,248,0.45)] hover:-translate-y-[2px] hover:shadow-[0_18px_40px_-12px_rgba(129,140,248,0.55)]",
+    "bg-gradient-to-r from-[var(--accent)] to-[var(--accent2)] text-[#0b1224] hover:-translate-y-[1px]",
   outline:
-    "border border-[var(--border2)] text-[var(--text2)] hover:border-[var(--accent)] hover:text-white hover:-translate-y-[2px]",
-  ghost:
-    "text-[var(--text2)] hover:text-white hover:bg-[var(--surface)]",
+    "border border-[var(--border2)] text-[var(--text2)] hover:border-[var(--accent)] hover:text-white hover:-translate-y-[1px]",
+  ghost: "text-[var(--text2)] hover:text-white hover:bg-[var(--surface)]",
 };
 
 export default function Button({
