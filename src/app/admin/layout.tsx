@@ -46,6 +46,14 @@ export default function AdminLayout({
             >
               ↗ Site
             </Link>
+            <form action="/api/logout" method="POST" className="ml-1">
+              <button
+                type="submit"
+                className="px-3 py-1.5 text-xs font-medium rounded-full border border-[var(--border2)] text-[var(--text2)] hover:border-[var(--rose)] hover:text-[var(--rose)] transition-colors cursor-pointer"
+              >
+                Logout
+              </button>
+            </form>
           </nav>
         </div>
       </header>
