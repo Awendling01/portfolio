@@ -38,7 +38,7 @@ export default function TwoCareers() {
           </span>
         </div>
         <h3 className="text-xl font-bold text-white tracking-tight">
-          Showing people how to win
+          Coaching teams to close
         </h3>
         <p className="mt-2 text-sm text-[var(--text)] leading-relaxed">
           Top-3% national rep, team lead of 8, and CRM administrator — six years
