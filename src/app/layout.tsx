@@ -2,8 +2,6 @@ import type { Metadata, Viewport } from "next";
 import { Outfit, Fira_Code } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import Nav from "@/components/layout/Nav";
-import Footer from "@/components/layout/Footer";
 import "./globals.css";
 
 const outfit = Outfit({
@@ -83,9 +81,7 @@ export default function RootLayout({
         <div className="noise" aria-hidden="true" />
         <div className="glow glow-accent" aria-hidden="true" />
         <div className="glow glow-accent2" aria-hidden="true" />
-        <Nav />
-        <main className="relative z-10 flex-1">{children}</main>
-        <Footer />
+        {children}
         <Analytics />
         <SpeedInsights />
       </body>

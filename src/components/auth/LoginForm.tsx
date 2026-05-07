@@ -1,8 +1,8 @@
 "use client";
 
 import { useActionState } from "react";
-import { login } from "@/app/login/actions";
-import { initialLoginState, type LoginState } from "@/app/login/state";
+import { login } from "@/app/(site)/login/actions";
+import { initialLoginState, type LoginState } from "@/app/(site)/login/state";
 
 type Props = { next?: string };
 
