@@ -1,6 +1,6 @@
 "use server";
 
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 import {
   createSessionValue,
@@ -9,7 +9,27 @@ import {
   SESSION_COOKIE_NAME,
   SESSION_MAX_AGE_SECONDS,
 } from "@/lib/auth";
+import { getDb, hasDatabase, schema } from "@/lib/db";
+import { getClientIp, hashIp } from "@/lib/visitor";
+import { lookupIp } from "@/lib/ipinfo";
+import { checkLoginRate } from "@/lib/rate-limit";
 import type { LoginState } from "./state";
+
+async function logAttempt(opts: {
+  ipHash: string | null;
+  succeeded: boolean;
+  userAgent: string | null;
+  country: string | null;
+  org: string | null;
+}) {
+  if (!hasDatabase) return;
+  try {
+    const db = getDb();
+    await db.insert(schema.loginAttempts).values(opts);
+  } catch (err) {
+    console.error("login: attempt log failed", err);
+  }
+}
 
 export async function login(
   _prev: LoginState,
@@ -18,10 +38,6 @@ export async function login(
   const password = String(formData.get("password") ?? "");
   const next = safeNextPath(String(formData.get("next") ?? ""));
 
-  if (!password) {
-    return { status: "error", message: "Enter the admin password." };
-  }
-
   if (!process.env.ADMIN_PASSWORD) {
     return {
       status: "error",
@@ -29,7 +45,43 @@ export async function login(
     };
   }
 
-  if (!passwordMatches(password)) {
+  const reqHeaders = await headers();
+  const clientIp = getClientIp(reqHeaders);
+  const ipHash = hashIp(clientIp);
+  const userAgent = reqHeaders.get("user-agent");
+  const country = reqHeaders.get("x-vercel-ip-country");
+
+  // Cheap fast path: rate-limit before doing the IPinfo lookup so a flood of
+  // attempts doesn't burn quota.
+  const rate = await checkLoginRate(ipHash);
+  if (!rate.allowed) {
+    return {
+      status: "error",
+      message: `Too many attempts. Try again in ${Math.ceil(
+        rate.retryAfterSeconds / 60,
+      )} minute${rate.retryAfterSeconds >= 120 ? "s" : ""}.`,
+    };
+  }
+
+  if (!password) {
+    return { status: "error", message: "Enter the admin password." };
+  }
+
+  const ok = passwordMatches(password);
+
+  // Enrich on a non-blocking timeout — IPinfo may take up to 1.5s, but we
+  // want this attempt logged either way.
+  const enrichment = await lookupIp(clientIp);
+
+  await logAttempt({
+    ipHash,
+    succeeded: ok,
+    userAgent,
+    country: enrichment.country ?? country,
+    org: enrichment.org,
+  });
+
+  if (!ok) {
     return { status: "error", message: "Incorrect password." };
   }
 

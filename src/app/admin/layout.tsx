@@ -8,8 +8,10 @@ export const metadata: Metadata = {
 
 const navLinks = [
   { href: "/admin", label: "Overview" },
+  { href: "/admin/analytics", label: "Analytics" },
   { href: "/admin/visitors", label: "Visitors" },
   { href: "/admin/messages", label: "Messages" },
+  { href: "/admin/security", label: "Security" },
 ];
 
 export default function AdminLayout({

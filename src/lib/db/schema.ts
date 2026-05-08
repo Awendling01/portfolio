@@ -34,6 +34,12 @@ export const visits = pgTable(
     country: text("country"),
     region: text("region"),
     city: text("city"),
+    sessionId: text("session_id"),
+    ipHash: text("ip_hash"),
+    org: text("org"),
+    asn: text("asn"),
+    asDomain: text("as_domain"),
+    dwellMs: integer("dwell_ms"),
     isBot: boolean("is_bot").notNull().default(false),
     createdAt: timestamp("created_at", { withTimezone: true })
       .notNull()
@@ -42,5 +48,26 @@ export const visits = pgTable(
   (t) => ({
     createdAtIdx: index("visits_created_at_idx").on(t.createdAt),
     slugIdx: index("visits_slug_idx").on(t.slug),
+    sessionIdx: index("visits_session_id_idx").on(t.sessionId),
+    ipHashIdx: index("visits_ip_hash_idx").on(t.ipHash),
+  }),
+);
+
+export const loginAttempts = pgTable(
+  "login_attempts",
+  {
+    id: serial("id").primaryKey(),
+    ipHash: text("ip_hash"),
+    succeeded: boolean("succeeded").notNull(),
+    userAgent: text("user_agent"),
+    country: text("country"),
+    org: text("org"),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+  },
+  (t) => ({
+    createdAtIdx: index("login_attempts_created_at_idx").on(t.createdAt),
+    ipHashIdx: index("login_attempts_ip_hash_idx").on(t.ipHash),
   }),
 );
