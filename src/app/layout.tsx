@@ -59,6 +59,9 @@ export const metadata: Metadata = {
       "Full-stack engineer + sales leader. Open to Developer, SE, and CSM roles.",
   },
   robots: { index: true, follow: true },
+  verification: {
+    google: "n-zkP_WEZIk9xpNxWclBmrLUHFLRWiQNzDM7afm000A",
+  },
 };
 
 export const viewport: Viewport = {
