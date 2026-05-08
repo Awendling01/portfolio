@@ -1,7 +1,17 @@
 import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
 import { sql } from "drizzle-orm";
 import { getDb, hasDatabase, schema } from "@/lib/db";
 import { isLikelyBot } from "@/lib/bot";
+import {
+  VISITOR_COOKIE_NAME,
+  VISITOR_COOKIE_MAX_AGE_SECONDS,
+  getClientIp,
+  hashIp,
+  isValidVisitorId,
+  newVisitorId,
+} from "@/lib/visitor";
+import { lookupIp } from "@/lib/ipinfo";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -50,6 +60,22 @@ export async function POST(request: Request) {
     }
   })();
 
+  // Visitor session cookie — anonymous UUID, persisted ~90 days, lets us group
+  // page views from the same browser even when their IP shifts.
+  const cookieStore = await cookies();
+  const existingId = cookieStore.get(VISITOR_COOKIE_NAME)?.value;
+  const sessionId = isValidVisitorId(existingId) ? existingId! : newVisitorId();
+  const isNewSession = sessionId !== existingId;
+
+  // IP enrichment — hashed IP for grouping, ASN/org name for "is this a
+  // recruiter from a known company?" signal.
+  const clientIp = getClientIp(request.headers);
+  const ipHash = hashIp(clientIp);
+  const enrichment = await lookupIp(clientIp);
+
+  const uaBot = isLikelyBot(userAgent);
+  const isBot = uaBot || enrichment.isCloudProvider;
+
   const db = getDb();
 
   const [row] = await db
@@ -61,23 +87,49 @@ export async function POST(request: Request) {
     })
     .returning({ count: schema.views.count });
 
-  // Best-effort visit logging — never block the view counter on a failure here.
+  // Best-effort visit logging — never block the view counter on a failure.
+  let visitId: number | null = null;
   try {
-    await db.insert(schema.visits).values({
-      slug,
-      path,
-      referrer,
-      userAgent,
-      country,
-      region,
-      city,
-      isBot: isLikelyBot(userAgent),
-    });
+    const [visitRow] = await db
+      .insert(schema.visits)
+      .values({
+        slug,
+        path,
+        referrer,
+        userAgent,
+        country: enrichment.country ?? country,
+        region,
+        city,
+        sessionId,
+        ipHash,
+        org: enrichment.org,
+        asn: enrichment.asn,
+        asDomain: enrichment.asDomain,
+        isBot,
+      })
+      .returning({ id: schema.visits.id });
+    visitId = visitRow?.id ?? null;
   } catch (err) {
     console.error("views: visit insert failed", err);
   }
 
-  return NextResponse.json({ count: row?.count ?? 0, persisted: true });
+  const response = NextResponse.json({
+    count: row?.count ?? 0,
+    persisted: true,
+    visitId,
+  });
+
+  if (isNewSession || existingId !== sessionId) {
+    response.cookies.set(VISITOR_COOKIE_NAME, sessionId, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
+      maxAge: VISITOR_COOKIE_MAX_AGE_SECONDS,
+    });
+  }
+
+  return response;
 }
 
 export async function GET(request: Request) {
