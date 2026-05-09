@@ -12,6 +12,7 @@ import {
   newVisitorId,
 } from "@/lib/visitor";
 import { lookupIp } from "@/lib/ipinfo";
+import { checkViewsRate } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -71,6 +72,20 @@ export async function POST(request: Request) {
   // recruiter from a known company?" signal.
   const clientIp = getClientIp(request.headers);
   const ipHash = hashIp(clientIp);
+
+  // Rate-limit by hashed IP. A single browser visiting the site organically
+  // is well under 60 hits/minute; an attacker hammering the endpoint is not.
+  const rate = await checkViewsRate(ipHash);
+  if (!rate.allowed) {
+    return NextResponse.json(
+      { error: "Too many requests" },
+      {
+        status: 429,
+        headers: { "Retry-After": String(rate.retryAfterSeconds) },
+      },
+    );
+  }
+
   const enrichment = await lookupIp(clientIp);
 
   const uaBot = isLikelyBot(userAgent);

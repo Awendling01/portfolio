@@ -66,7 +66,7 @@ export const projects: Project[] = [
     dates: "March 2026",
     role: "Full-Stack Developer",
     description:
-      "Full-stack trade show kiosk application. Customers customize products with AI-generated imagery, preview composites in real-time, and check out through a headless Shopify integration. Two tablets sync via QR codes and Postgres session polling for a seamless customer-and-attendant flow.",
+      "Full-stack trade show kiosk application. Customers customize products with AI-generated imagery, preview composites in real-time, and check out through a headless Shopify integration. Two tablets — one for the customer, one for the attendant — share a single session via QR codes and Postgres polling, so both screens stay in sync in real time.",
     highlights: [
       "AI image generation via OpenAI gpt-image-1.5",
       "Background removal (Replicate) + neural upscaling (Claid.ai)",
@@ -351,11 +351,51 @@ export const skills = {
   ],
 };
 
+export type Testimonial = {
+  quote: string;
+  name: string;
+  title: string;
+  context: string;
+  accent: "accent" | "accent2" | "green" | "amber";
+};
+
+// Sourced from LinkedIn recommendations at
+// https://linkedin.com/in/awendling01/details/recommendations/
+// Quotes are condensed for the homepage card; the full text lives on LinkedIn.
+export const testimonials: Testimonial[] = [
+  {
+    quote:
+      "Andrew is honest, principled, and direct conversations toward solutions. His dedication to learning and adopting new frameworks is impressive, and he continually pushes himself to deliver high-quality code. Beyond his technical expertise, he communicates with clarity and professionalism — his collaborative and dependable work ethic elevates those around him.",
+    name: "Ben Trerise",
+    title: "Systems Manager, FutureShirts",
+    context: "Worked together for 2+ years",
+    accent: "accent",
+  },
+  {
+    quote:
+      "I worked with Andrew at AT&T and T-Mobile and have seen him grow professionally over the years. I can vouch for his skills as a sales professional, his growing technical knowledge, and his ability to quickly adapt to new challenges. I've always been impressed by his self-starter nature and drive toward learning.",
+    name: "Charles Parry",
+    title: "Cybersecurity Partnerships, Dispel",
+    context: "AT&T and T-Mobile teammate",
+    accent: "green",
+  },
+  {
+    quote:
+      "Andrew rose to the challenge and smashed it. As a new developer, he had a high learning curve to overcome — not only did he rise to it, he quickly became a key contributor. He was great at communicating risks and blockers and met every timeline. Any project manager would be lucky to have Andrew on their team.",
+    name: "Shannon Lynn",
+    title: "Founder, Equity Bookkeeping & Consulting",
+    context: "Project lead, ~1 year working together",
+    accent: "accent2",
+  },
+];
+
+export const linkedinRecommendationsUrl =
+  "https://linkedin.com/in/awendling01/details/recommendations/";
+
 export const contact = {
   name: "Andrew Wendling",
   location: "Spanish Fort, AL",
-  email: "Gohikeco1@gmail.com",
-  phone: "***REMOVED***",
+  email: "gohikeco1@gmail.com",
   linkedin: "https://linkedin.com/in/awendling01",
   linkedinHandle: "linkedin.com/in/awendling01",
   github: "https://github.com/Awendling01",

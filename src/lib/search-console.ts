@@ -143,13 +143,3 @@ export async function getTopPages(): Promise<SearchAnalyticsResponse | null> {
     rowLimit: 10,
   });
 }
-
-export async function getDailyTotals(): Promise<SearchAnalyticsResponse | null> {
-  const status = getSearchConsoleStatus();
-  if (!status.configured) return null;
-  return callSearchAnalytics({
-    siteUrl: status.siteUrl,
-    dimensions: ["date"],
-    rowLimit: 60,
-  });
-}
