@@ -84,6 +84,45 @@ export default function RootLayout({
         <div className="noise" aria-hidden="true" />
         <div className="glow glow-accent" aria-hidden="true" />
         <div className="glow glow-accent2" aria-hidden="true" />
+        {/* JSON-LD Person schema. Helps Google build a Knowledge Panel for
+            "Andrew Wendling" and signals identity to AI search tools. */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Person",
+              name: "Andrew Wendling",
+              url: "https://andrewwendling.info",
+              image: "https://andrewwendling.info/opengraph-image",
+              jobTitle: "Full-Stack Software Engineer",
+              description:
+                "Full-stack engineer with 5+ years shipping production SaaS and 6+ years sales experience. Open to Developer, Solutions Engineer, Sales Engineer, and Customer Success Manager roles.",
+              address: {
+                "@type": "PostalAddress",
+                addressLocality: "Spanish Fort",
+                addressRegion: "AL",
+                addressCountry: "US",
+              },
+              sameAs: [
+                "https://linkedin.com/in/awendling01",
+                "https://github.com/Awendling01",
+              ],
+              knowsAbout: [
+                "Full-Stack Development",
+                "Laravel",
+                "Next.js",
+                "TypeScript",
+                "React",
+                "Vue",
+                "Multi-Tenant SaaS",
+                "Solutions Engineering",
+                "Customer Success",
+                "Sales Engineering",
+              ],
+            }),
+          }}
+        />
         {children}
         <Analytics />
         <SpeedInsights />
