@@ -1,18 +1,37 @@
 @AGENTS.md
 
-# Portfolio site — content guardrails
+# Content style guide
 
-Personal portfolio for Andrew Wendling, positioning him for Developer, Solutions Engineer, Sales Engineer, and Customer Success Manager roles. The sales background is a deliberate equal-weight differentiator — never bury it.
+Editorial rules for portfolio copy. AI assistants working in this repo read
+this file too.
 
-Single source of truth for all copy is `src/lib/content.ts`. Edit there, never duplicate strings into pages.
+## Positioning
 
-Hard accuracy rules — these have been violated before:
-- FutureShirts: he "contributed extensively." Never "led end-to-end development."
-- inVia Robotics: supporting role (daily monitoring), not lead.
-- AT&T: Sales Associate / Management Training Lead. Not leadership title.
-- uBreakiFix: managed 2 stores. Midwest district leadership belongs to T-Mobile, not uBreakiFix.
-- Never list Docker or AWS — he hasn't used them.
-- Inertia.js framing is "modern monolith," not "server-driven rendering."
-- FutureShirts Shopify work was primarily GraphQL queries.
-- MONISCOPE is pre-launch. Use "designed to support," never "enabling [live customers]."
-- Test count is 1,850+ (consistent across the site).
+The site presents me for Developer, Solutions Engineer, Sales Engineer, and
+Customer Success Manager roles. Engineering and sales are equal-weight
+differentiators — neither buries the other.
+
+## Source of truth
+
+All copy lives in `src/lib/content.ts`. Edit there. Page components import
+from it; never duplicate strings into JSX.
+
+## Accuracy rules
+
+These reflect my actual scope of work. Respect them on every edit.
+
+| Project / role | Accurate framing |
+|---|---|
+| FutureShirts (Sept 2022 – Sept 2025) | "Contributed extensively" to internal ERP / IMS. Not "led end-to-end development." |
+| inVia Robotics integration | Supporting role (daily monitoring). Not technical lead. |
+| AT&T (2013–2016) | Sales Associate / Management Training Lead. Coaching scope, not formal leadership title. |
+| uBreakiFix (2020–2021) | Managed 2 retail stores. Multi-store / district-level scope was at T-Mobile, not uBreakiFix. |
+| MONISCOPE | Pre-launch. Phrase features as "designed to support" — never "enabling live customers." |
+| Inertia.js | Frame as "modern monolith," not "server-driven rendering." |
+| FutureShirts Shopify work | Primarily GraphQL queries against the Admin API. |
+| Test count | 1,850+ across Pest/PHPUnit and Cypress. Keep consistent across the site. |
+
+## Tooling not to claim
+
+I haven't used Docker or AWS in production. Don't list them in skills,
+project tech stacks, or `/uses`.
