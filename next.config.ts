@@ -48,6 +48,20 @@ const nextConfig: NextConfig = {
         source: "/:path*",
         headers: securityHeaders,
       },
+      // The OG image is meant to be embedded by third parties (Twitter,
+      // LinkedIn, Slack, iMessage, link previewers). The default CORP value
+      // above blocks cross-origin fetches; this override lets share cards
+      // actually render the image.
+      {
+        source: "/opengraph-image",
+        headers: [
+          { key: "Cross-Origin-Resource-Policy", value: "cross-origin" },
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+        ],
+      },
     ];
   },
 };

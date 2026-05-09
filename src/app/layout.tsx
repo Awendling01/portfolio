@@ -46,7 +46,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Andrew Wendling — Full-Stack Engineer + Sales Background",
     description:
-      "Software engineer + sales leader. Building toward Solutions Engineering.",
+      "Full-stack engineer with 5+ years shipping production SaaS, plus 6 years in sales — top 3% nationally. Open to Dev, SE, and CSM roles.",
     url: "https://andrewwendling.info",
     siteName: "Andrew Wendling",
     locale: "en_US",
@@ -54,9 +54,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Andrew Wendling",
+    title: "Andrew Wendling — Full-Stack Engineer + Sales Background",
     description:
-      "Full-stack engineer + sales leader. Open to Developer, SE, and CSM roles.",
+      "Full-stack engineer with 5+ years shipping production SaaS, plus 6 years in sales — top 3% nationally. Open to Dev, SE, and CSM roles.",
   },
   robots: { index: true, follow: true },
   verification: {
