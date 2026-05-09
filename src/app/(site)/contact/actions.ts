@@ -1,10 +1,13 @@
 "use server";
 
+import { headers } from "next/headers";
 import { Resend } from "resend";
 import { z } from "zod";
 import { getDb, hasDatabase, schema } from "@/lib/db";
 import ContactMessageEmail from "@/emails/ContactMessage";
 import { contact } from "@/lib/content";
+import { getClientIp, hashIp } from "@/lib/visitor";
+import { checkContactRate } from "@/lib/rate-limit";
 import { ContactSchema } from "./schema";
 import type { ContactState } from "./state";
 
@@ -17,6 +20,21 @@ export async function submitContact(
     // Spam bot tripped the honeypot. Return the same UI as a real success
     // — don't reveal the trap, don't persist, don't email.
     return successState();
+  }
+
+  // Rate limit by hashed IP before validating, so a flood of submissions
+  // can't burn DB time.
+  const reqHeaders = await headers();
+  const ipHash = hashIp(getClientIp(reqHeaders));
+  const rate = await checkContactRate(ipHash);
+  if (!rate.allowed) {
+    const minutes = Math.ceil(rate.retryAfterSeconds / 60);
+    return {
+      status: "error",
+      message: `You've sent a few messages already — please wait ${minutes} minute${
+        minutes === 1 ? "" : "s"
+      } before sending another, or email ${contact.email} directly.`,
+    };
   }
 
   const parsed = ContactSchema.safeParse({
@@ -44,7 +62,9 @@ export async function submitContact(
   if (hasDatabase) {
     try {
       const db = getDb();
-      await db.insert(schema.messages).values({ name, email, message });
+      await db
+        .insert(schema.messages)
+        .values({ name, email, message, ipHash });
     } catch (err) {
       console.error("contact: db insert failed", err);
       return {
@@ -63,9 +83,7 @@ export async function submitContact(
       const resend = new Resend(apiKey);
       const { error } = await resend.emails.send({
         from: fromAddress,
-        // Resend does a case-sensitive recipient check; lowercase to match
-        // the address as registered with the Resend account.
-        to: contact.email.toLowerCase(),
+        to: contact.email,
         replyTo: email,
         subject: `Portfolio message from ${name}`,
         react: ContactMessageEmail({ name, email, message }),

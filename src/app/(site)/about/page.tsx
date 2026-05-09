@@ -97,14 +97,6 @@ export default function AboutPage() {
                     {contact.email}
                   </a>
                 </div>
-                <div>
-                  <a
-                    href={`tel:${contact.phone.replace(/\D/g, "")}`}
-                    className="text-[var(--text2)] hover:text-[var(--accent)]"
-                  >
-                    {contact.phone}
-                  </a>
-                </div>
                 <div className="pt-3 border-t border-[var(--border)]/70">
                   <a
                     href="/resume.pdf"

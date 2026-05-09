@@ -18,12 +18,6 @@ const channels = [
     blurb: "Best for role intros and detailed conversations.",
   },
   {
-    label: "Phone",
-    value: contact.phone,
-    href: `tel:${contact.phone.replace(/\D/g, "")}`,
-    blurb: "Central time. Voicemail or text — both work.",
-  },
-  {
     label: "LinkedIn",
     value: contact.linkedinHandle,
     href: contact.linkedin,

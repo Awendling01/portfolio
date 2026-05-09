@@ -7,6 +7,8 @@ import SectionHeader from "@/components/ui/SectionHeader";
 import ScrollReveal from "@/components/ui/ScrollReveal";
 import ProjectCard from "@/components/projects/ProjectCard";
 import TwoCareers from "@/components/sections/TwoCareers";
+import WhatIBring from "@/components/sections/WhatIBring";
+import Testimonials from "@/components/sections/Testimonials";
 import GitHubRepos from "@/components/integrations/GitHubRepos";
 import { projects, heroStats, contact } from "@/lib/content";
 
@@ -41,6 +43,65 @@ export default function Home() {
               software and revenue actually meet.
             </p>
 
+            <div className="mt-7 flex flex-wrap gap-2">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-[var(--border)] bg-[var(--surface)]/60 px-3 py-1.5 mono text-[10px] uppercase tracking-[0.16em] text-[var(--text2)]">
+                <svg
+                  viewBox="0 0 24 24"
+                  className="w-3.5 h-3.5"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                  aria-hidden="true"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"
+                  />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"
+                  />
+                </svg>
+                Spanish Fort, AL · Remote-friendly
+              </span>
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-[var(--border)] bg-[var(--surface)]/60 px-3 py-1.5 mono text-[10px] uppercase tracking-[0.16em] text-[var(--text2)]">
+                <svg
+                  viewBox="0 0 24 24"
+                  className="w-3.5 h-3.5"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                  aria-hidden="true"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M14.25 9.75 16.5 12l-2.25 2.25m-4.5 0L7.5 12l2.25-2.25M6 20.25h12A2.25 2.25 0 0 0 20.25 18V6A2.25 2.25 0 0 0 18 3.75H6A2.25 2.25 0 0 0 3.75 6v12A2.25 2.25 0 0 0 6 20.25Z"
+                  />
+                </svg>
+                Laravel · Next.js · TypeScript
+              </span>
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-[var(--border)] bg-[var(--surface)]/60 px-3 py-1.5 mono text-[10px] uppercase tracking-[0.16em] text-[var(--text2)]">
+                <svg
+                  viewBox="0 0 24 24"
+                  className="w-3.5 h-3.5"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                  aria-hidden="true"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M15.59 14.37a6 6 0 0 1-5.84 7.38v-4.8m5.84-2.58a14.98 14.98 0 0 0 6.16-12.12A14.98 14.98 0 0 0 9.631 8.41m5.96 5.96a14.926 14.926 0 0 1-5.841 2.58m-.119-8.54a6 6 0 0 0-7.381 5.84h4.8m2.581-5.84a14.927 14.927 0 0 0-2.58 5.84m2.699 2.7c-.103.021-.207.041-.311.06a15.09 15.09 0 0 1-2.448-2.448 14.9 14.9 0 0 1 .06-.312m-2.24 2.39a4.493 4.493 0 0 0-1.757 4.306 4.493 4.493 0 0 0 4.306-1.758M16.5 9a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z"
+                  />
+                </svg>
+                Available immediately
+              </span>
+            </div>
+
             <div className="mt-9 flex flex-wrap items-center gap-3">
               <Button href="/contact">Get In Touch</Button>
               <Button href={contact.linkedin} variant="outline" external>
@@ -51,10 +112,31 @@ export default function Home() {
               </Button>
             </div>
 
-            <div className="mt-12 flex items-center gap-3 text-[var(--text)] mono text-xs uppercase tracking-[0.2em]">
-              <span className="w-10 h-px bg-[var(--border2)]" />
-              Scroll for projects
-            </div>
+            <a
+              href="#work"
+              aria-label="Scroll to projects section"
+              className="mt-12 inline-flex items-center gap-3 text-[var(--text)] hover:text-[var(--accent)] transition-colors group"
+            >
+              <span className="inline-flex items-center justify-center w-10 h-10 rounded-full border border-[var(--border2)] group-hover:border-[var(--accent)]/60 transition-colors">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                  className="w-4 h-4 bounce-down"
+                  aria-hidden="true"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="m19.5 8.25-7.5 7.5-7.5-7.5"
+                  />
+                </svg>
+              </span>
+              <span className="mono text-xs uppercase tracking-[0.2em]">
+                Projects below
+              </span>
+            </a>
           </div>
         </Container>
       </section>
@@ -64,6 +146,22 @@ export default function Home() {
         <Container>
           <ScrollReveal>
             <StatBar stats={heroStats} />
+          </ScrollReveal>
+        </Container>
+      </section>
+
+      {/* What I bring */}
+      <section className="py-16 sm:py-20">
+        <Container>
+          <ScrollReveal>
+            <SectionHeader
+              tag="What I Bring"
+              title="The combination engineering teams keep saying they need"
+              subtitle="Production AI, multi-tenant architecture, customer-facing instincts, and a sales background that means you don't have to teach me how to talk to revenue."
+            />
+          </ScrollReveal>
+          <ScrollReveal>
+            <WhatIBring />
           </ScrollReveal>
         </Container>
       </section>
@@ -105,6 +203,22 @@ export default function Home() {
           </ScrollReveal>
           <ScrollReveal>
             <TwoCareers />
+          </ScrollReveal>
+        </Container>
+      </section>
+
+      {/* Testimonials */}
+      <section className="py-20 sm:py-24">
+        <Container>
+          <ScrollReveal>
+            <SectionHeader
+              tag="In Their Words"
+              title="What teammates and managers have said"
+              subtitle="Recommendations pulled from LinkedIn — full versions linked at the bottom of the section."
+            />
+          </ScrollReveal>
+          <ScrollReveal>
+            <Testimonials />
           </ScrollReveal>
         </Container>
       </section>

@@ -159,3 +159,29 @@ code,
 .pulse-dot {
   animation: pulse-dot 2s ease-in-out infinite;
 }
+
+@keyframes bounce-down {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(5px);
+  }
+}
+
+/* Both animation + smooth scroll respect prefers-reduced-motion. */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  .bounce-down {
+    animation: bounce-down 1.8s ease-in-out infinite;
+  }
+}
+
+/* Anchor targets land below the fixed nav, not under it. */
+section[id] {
+  scroll-margin-top: 80px;
+}

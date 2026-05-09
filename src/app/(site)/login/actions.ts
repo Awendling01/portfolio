@@ -69,8 +69,8 @@ export async function login(
 
   const ok = passwordMatches(password);
 
-  // Enrich on a non-blocking timeout — IPinfo may take up to 1.5s, but we
-  // want this attempt logged either way.
+  // IPinfo has a 1.5s internal timeout. If it fails or times out we still
+  // log the attempt with whatever Vercel headers gave us.
   const enrichment = await lookupIp(clientIp);
 
   await logAttempt({
