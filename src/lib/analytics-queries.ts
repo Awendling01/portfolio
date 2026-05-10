@@ -64,7 +64,7 @@ export async function getDailyBuckets(): Promise<DailyBucket[]> {
       COALESCE(v.sessions, 0)::int AS sessions,
       COALESCE(v.pageviews, 0)::int AS pageviews
     FROM generate_series(
-      date_trunc('day', now() - interval '${sql.raw(String(DAYS - 1))} days'),
+      date_trunc('day', now() - ${DAYS - 1} * interval '1 day'),
       date_trunc('day', now()),
       '1 day'::interval
     ) AS d(day)
@@ -74,7 +74,7 @@ export async function getDailyBuckets(): Promise<DailyBucket[]> {
         COUNT(DISTINCT session_id) FILTER (WHERE session_id IS NOT NULL) AS sessions,
         COUNT(*) AS pageviews
       FROM visits
-      WHERE created_at > now() - interval '${sql.raw(String(DAYS))} days'
+      WHERE created_at > now() - ${DAYS} * interval '1 day'
         AND is_bot = false
       GROUP BY 1
     ) v ON v.day = d.day
@@ -102,7 +102,7 @@ export async function getTopPages(): Promise<TopPage[]> {
         0
       )::int AS avg_dwell_ms
     FROM visits
-    WHERE created_at > now() - interval '${sql.raw(String(DAYS))} days'
+    WHERE created_at > now() - ${DAYS} * interval '1 day'
       AND is_bot = false
     GROUP BY 1
     ORDER BY pageviews DESC
@@ -139,7 +139,7 @@ export async function getTopReferrers(): Promise<TopReferrer[]> {
           )
         END AS host
       FROM visits
-      WHERE created_at > now() - interval '${sql.raw(String(DAYS))} days'
+      WHERE created_at > now() - ${DAYS} * interval '1 day'
         AND is_bot = false
     ) sub
     GROUP BY 1
@@ -160,7 +160,7 @@ export async function getTopCountries(): Promise<TopCountry[]> {
       country,
       COUNT(DISTINCT session_id) FILTER (WHERE session_id IS NOT NULL)::int AS sessions
     FROM visits
-    WHERE created_at > now() - interval '${sql.raw(String(DAYS))} days'
+    WHERE created_at > now() - ${DAYS} * interval '1 day'
       AND is_bot = false
       AND country IS NOT NULL
     GROUP BY 1
@@ -191,7 +191,7 @@ export async function getTopBrowsers(): Promise<TopBrowser[]> {
           ELSE 'Other'
         END AS browser
       FROM visits
-      WHERE created_at > now() - interval '${sql.raw(String(DAYS))} days'
+      WHERE created_at > now() - ${DAYS} * interval '1 day'
         AND is_bot = false
     ) sub
     GROUP BY 1
@@ -220,7 +220,7 @@ export async function getTopOs(): Promise<TopOs[]> {
           ELSE 'Other'
         END AS os
       FROM visits
-      WHERE created_at > now() - interval '${sql.raw(String(DAYS))} days'
+      WHERE created_at > now() - ${DAYS} * interval '1 day'
         AND is_bot = false
     ) sub
     GROUP BY 1
@@ -239,7 +239,7 @@ export async function getEngagementStats(): Promise<EngagementStats> {
     WITH session_pages AS (
       SELECT session_id, COUNT(*)::int AS page_count, SUM(COALESCE(dwell_ms, 0))::bigint AS total_dwell_ms
       FROM visits
-      WHERE created_at > now() - interval '${sql.raw(String(DAYS))} days'
+      WHERE created_at > now() - ${DAYS} * interval '1 day'
         AND is_bot = false
         AND session_id IS NOT NULL
       GROUP BY session_id
@@ -247,7 +247,7 @@ export async function getEngagementStats(): Promise<EngagementStats> {
     pv AS (
       SELECT COUNT(*)::int AS pageviews
       FROM visits
-      WHERE created_at > now() - interval '${sql.raw(String(DAYS))} days'
+      WHERE created_at > now() - ${DAYS} * interval '1 day'
         AND is_bot = false
     )
     SELECT
@@ -296,7 +296,7 @@ export async function getNewVsReturning(): Promise<NewVsReturning> {
       FROM visits
       WHERE session_id IS NOT NULL
         AND is_bot = false
-        AND created_at > now() - interval '${sql.raw(String(DAYS))} days'
+        AND created_at > now() - ${DAYS} * interval '1 day'
     ),
     first_visit AS (
       SELECT v.session_id, MIN(v.created_at) AS first_at
@@ -305,8 +305,8 @@ export async function getNewVsReturning(): Promise<NewVsReturning> {
       GROUP BY v.session_id
     )
     SELECT
-      COUNT(*) FILTER (WHERE first_at > now() - interval '${sql.raw(String(DAYS))} days')::int AS new_sessions,
-      COUNT(*) FILTER (WHERE first_at <= now() - interval '${sql.raw(String(DAYS))} days')::int AS returning_sessions
+      COUNT(*) FILTER (WHERE first_at > now() - ${DAYS} * interval '1 day')::int AS new_sessions,
+      COUNT(*) FILTER (WHERE first_at <= now() - ${DAYS} * interval '1 day')::int AS returning_sessions
     FROM first_visit
   `);
 
