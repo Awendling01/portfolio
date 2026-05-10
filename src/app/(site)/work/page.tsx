@@ -4,6 +4,7 @@ import SectionHeader from "@/components/ui/SectionHeader";
 import ScrollReveal from "@/components/ui/ScrollReveal";
 import ProjectCard from "@/components/projects/ProjectCard";
 import Button from "@/components/ui/Button";
+import Card from "@/components/ui/Card";
 import { projects } from "@/lib/content";
 
 export const metadata: Metadata = {
@@ -28,16 +29,31 @@ export default function WorkPage() {
         <Container>
           <div className="space-y-6">
             {projects.map((p, i) => (
-              <ScrollReveal key={p.slug} delay={i * 60}>
-                <ProjectCard project={p} />
-              </ScrollReveal>
+              <section key={p.slug} id={p.slug}>
+                <ScrollReveal delay={i * 60}>
+                  <ProjectCard
+                    project={p}
+                    detailHref={
+                      p.slug === "moniscope"
+                        ? "/work/moniscope"
+                        : p.slug === "offroad-kiosk"
+                          ? "/work/kiosk"
+                          : undefined
+                    }
+                  />
+                </ScrollReveal>
+              </section>
             ))}
           </div>
         </Container>
       </section>
       <section className="py-20">
         <Container>
-          <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)]/80 p-8 sm:p-10 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+          <Card
+            padding="large"
+            hover={false}
+            className="flex flex-col sm:flex-row sm:items-center justify-between gap-6"
+          >
             <div>
               <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
                 Want a deeper walkthrough?
@@ -48,7 +64,7 @@ export default function WorkPage() {
               </p>
             </div>
             <Button href="/contact">Get In Touch</Button>
-          </div>
+          </Card>
         </Container>
       </section>
     </>
