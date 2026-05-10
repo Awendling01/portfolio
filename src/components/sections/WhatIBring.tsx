@@ -1,23 +1,26 @@
 import type { ReactNode } from "react";
+import Card from "@/components/ui/Card";
 
-type Card = {
+type Accent = "accent" | "accent2" | "green" | "amber";
+
+type WhatIBringCard = {
   title: string;
   body: string;
-  accent: "accent" | "accent2" | "green" | "amber";
+  accent: Accent;
   icon: ReactNode;
 };
 
-const accentBg: Record<Card["accent"], string> = {
+const accentBadge: Record<Accent, string> = {
   accent: "bg-[var(--accent)]/10 text-[var(--accent)]",
   accent2: "bg-[var(--accent2)]/10 text-[var(--accent2)]",
   green: "bg-[var(--green)]/10 text-[var(--green)]",
   amber: "bg-[var(--amber)]/10 text-[var(--amber)]",
 };
 
-const cards: Card[] = [
+const cards: WhatIBringCard[] = [
   {
     title: "Ships production AI",
-    body: "OpenAI image generation and Anthropic agents wired into live customer flows. Not tutorial demos.",
+    body: "OpenAI image generation shipped at a real trade-show. Anthropic agents architected into a pre-launch self-storage SaaS. Not tutorial demos.",
     accent: "accent",
     icon: (
       <svg
@@ -58,8 +61,8 @@ const cards: Card[] = [
     ),
   },
   {
-    title: "Sold before I built",
-    body: "Six years before software. Top 3% nationally at AT&T, top 5% district at T-Mobile, two stores at uBreakiFix.",
+    title: "Most devs can't sell. Most salespeople can't code.",
+    body: "Top 3% nationally at AT&T, top 5% district at T-Mobile, 2 stores at uBreakiFix — the whole career before engineering. The metrics are real and so is the test suite.",
     accent: "green",
     icon: (
       <svg
@@ -103,24 +106,26 @@ const cards: Card[] = [
 
 export default function WhatIBring() {
   return (
-    <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 auto-rows-fr">
       {cards.map((c) => (
-        <div
+        <Card
           key={c.title}
-          className="rounded-2xl border border-[var(--border)] bg-[var(--surface)]/80 p-6 transition-colors hover:border-[var(--accent)]/40"
+          hover={false}
+          padding="compact"
+          className="h-full flex flex-col"
         >
           <div
-            className={`inline-flex items-center justify-center w-10 h-10 rounded-lg ${accentBg[c.accent]}`}
+            className={`inline-flex items-center justify-center w-10 h-10 rounded-lg mb-4 ${accentBadge[c.accent]}`}
           >
             {c.icon}
           </div>
-          <h3 className="mt-4 text-base font-semibold text-white tracking-tight">
+          <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight leading-tight lg:min-h-[7.5rem]">
             {c.title}
           </h3>
-          <p className="mt-2 text-sm text-[var(--text)] leading-relaxed">
+          <p className="mt-4 text-sm text-[var(--text)] leading-relaxed lg:min-h-[8.75rem]">
             {c.body}
           </p>
-        </div>
+        </Card>
       ))}
     </div>
   );

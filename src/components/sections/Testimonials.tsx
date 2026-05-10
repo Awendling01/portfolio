@@ -40,7 +40,7 @@ export default function Testimonials() {
 
           <figcaption className="mt-6 pt-5 border-t border-[var(--border)]/50 flex items-center gap-3">
             <span
-              className={`flex items-center justify-center w-10 h-10 rounded-full border ${accentBg[t.accent]} mono text-xs font-semibold tracking-tight`}
+              className={`shrink-0 flex items-center justify-center w-10 h-10 rounded-full border ${accentBg[t.accent]} mono text-xs font-semibold tracking-tight`}
               aria-hidden="true"
             >
               {initials(t.name)}
