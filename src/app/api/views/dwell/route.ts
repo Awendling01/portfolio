@@ -12,6 +12,30 @@ export const dynamic = "force-dynamic";
 
 const MAX_DWELL_MS = 30 * 60 * 1000; // 30 minutes — anything more is junk
 
+// Per-session rate limit. Real browsers fire ~2-3 dwell beacons per page
+// (visibilitychange, pagehide, unmount). Anything above DWELL_MAX_PER_WINDOW
+// is either a buggy client or an attacker spamming sequential IDs.
+const DWELL_WINDOW_MS = 60 * 1000;
+const DWELL_MAX_PER_WINDOW = 30;
+const dwellRate = new Map<string, { count: number; windowStart: number }>();
+
+function checkDwellRate(sessionId: string): boolean {
+  const now = Date.now();
+  // Sweep expired entries first so the Map stays bounded on long-lived
+  // containers. Cheap O(n) scan; n is at most the active session count
+  // within the past minute.
+  for (const [k, v] of dwellRate) {
+    if (now - v.windowStart > DWELL_WINDOW_MS) dwellRate.delete(k);
+  }
+  const entry = dwellRate.get(sessionId);
+  if (!entry) {
+    dwellRate.set(sessionId, { count: 1, windowStart: now });
+    return true;
+  }
+  entry.count += 1;
+  return entry.count <= DWELL_MAX_PER_WINDOW;
+}
+
 export async function POST(request: Request) {
   if (!hasDatabase) return NextResponse.json({ ok: false });
 
@@ -22,6 +46,18 @@ export async function POST(request: Request) {
   const sessionId = cookieStore.get(VISITOR_COOKIE_NAME)?.value;
   if (!isValidVisitorId(sessionId)) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
+
+  // Rate-limit per visitor session before the DB write. Stops a malicious
+  // client from spamming sequential `id` values to burn DB roundtrips.
+  if (!checkDwellRate(sessionId!)) {
+    return NextResponse.json(
+      { error: "Too many requests" },
+      {
+        status: 429,
+        headers: { "Retry-After": String(Math.ceil(DWELL_WINDOW_MS / 1000)) },
+      },
+    );
   }
 
   let body: { id?: unknown; ms?: unknown };
