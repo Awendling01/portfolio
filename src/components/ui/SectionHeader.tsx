@@ -19,7 +19,7 @@ export default function SectionHeader({
           {tag}
         </div>
       ) : null}
-      <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-white">
+      <h2 className="text-[clamp(24px,6vw,36px)] font-bold tracking-tight text-white leading-[1.15] break-words">
         {title}
       </h2>
       {subtitle ? (

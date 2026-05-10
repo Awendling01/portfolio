@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 
-export const runtime = "nodejs";
-export const alt = "Andrew Wendling — Full-Stack Engineer + Sales Background";
+export const runtime = "edge";
+export const alt = "Andrew Wendling — Full-Stack Engineer with Top-3% Sales Background";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -66,8 +66,8 @@ export default async function OpenGraphImage() {
               gap: 8,
             }}
           >
-            <div style={{ display: "flex" }}>Five years building.</div>
-            <div style={{ display: "flex" }}>Six years selling.</div>
+            <div style={{ display: "flex" }}>Five years engineering.</div>
+            <div style={{ display: "flex" }}>Six years in sales before that.</div>
             <div style={{ display: "flex", flexWrap: "wrap" }}>
               <span>Engineer who can&nbsp;</span>
               <span
@@ -113,7 +113,7 @@ export default async function OpenGraphImage() {
           <div>·</div>
           <div>6+ Yrs Sales</div>
           <div>·</div>
-          <div>1,850+ Tests</div>
+          <div>1,852+ Tests</div>
           <div>·</div>
           <div>Top 3% National</div>
         </div>

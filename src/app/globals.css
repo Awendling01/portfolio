@@ -133,6 +133,21 @@ code,
   }
 }
 
+/* Hero digit accent — used on "5 years engineering" / "6 years in sales".
+   Pure typographic treatment: same white as surrounding text, slight
+   upscale, lighter weight than the H1's 800. The contrast of thin big
+   digits against the bold text IS the design — no gradient, no halo, no
+   color shift. Lets .shimmer ("carry a quota") stay the only colored
+   accent in the hero. */
+.digit-accent {
+  display: inline-block;
+  font-weight: 500;
+  font-size: 1.18em;
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+  color: inherit;
+}
+
 .reveal {
   opacity: 0;
   transform: translateY(30px);
@@ -177,11 +192,31 @@ code,
   }
 
   .bounce-down {
-    animation: bounce-down 1.8s ease-in-out infinite;
+    /* Same 2s · ease-in-out cycle as .pulse-dot above so the green
+       eyebrow dot and the bottom-of-hero arrow breathe in lockstep
+       instead of drifting in and out of phase. */
+    animation: bounce-down 2s ease-in-out infinite;
   }
 }
 
 /* Anchor targets land below the fixed nav, not under it. */
 section[id] {
   scroll-margin-top: 80px;
+}
+
+/* Shiki code blocks on case-study pages. Override shiki's default
+   background + spacing so the block matches the rest of the portfolio
+   chrome (the wrapping <div> already has a border + bg + rounded corners). */
+.case-code pre {
+  background: var(--surface) !important;
+  margin: 0 !important;
+  padding: 22px 24px !important;
+  font-size: 12.5px !important;
+  line-height: 1.65 !important;
+  overflow-x: auto;
+}
+.case-code code {
+  font-family:
+    var(--font-fira), ui-monospace, SFMono-Regular, Menlo, monospace !important;
+  font-size: 12.5px !important;
 }

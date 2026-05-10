@@ -7,7 +7,7 @@ import { contact } from "@/lib/content";
 export const metadata: Metadata = {
   title: "Contact",
   description:
-    "Get in touch with Andrew Wendling — full-stack engineer open to Developer, Solutions Engineer, Sales Engineer, and Customer Success Manager roles.",
+    "Get in touch with Andrew Wendling — full-stack engineer open to engineering, Solutions Engineer, Implementation Engineer, Developer Relations, and Customer Success roles.",
 };
 
 const channels = [
@@ -81,9 +81,10 @@ export default function ContactPage() {
                 Looking for
               </h3>
               <p className="mt-2 text-sm text-[var(--text2)] leading-relaxed">
-                Developer · Solutions Engineer · Sales Engineer · Customer
-                Success Manager. Based in {contact.location}. Open to remote and
-                relocation.
+                Full-stack engineering, Solutions Engineer, Implementation
+                Engineer, Developer Relations, Customer Success — or any
+                engineer- or customer-facing role. Based in{" "}
+                {contact.location}. Remote or relocation.
               </p>
             </div>
             <a
