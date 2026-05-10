@@ -7,8 +7,11 @@
 Personal portfolio for Andrew Wendling, deployed at
 [andrewwendling.info](https://andrewwendling.info).
 
-> Full-stack engineer + sales background. Open to Developer, Solutions
-> Engineer, Sales Engineer, and Customer Success Manager roles.
+> 5+ years shipping production SaaS — Laravel, Next.js, multi-tenant
+> architecture, AI integrations against Shopify, Stripe, Twilio, Klaviyo,
+> Recharge, and Plaid. Top-3% national sales background underneath.
+> Open to Solutions Engineer, Implementation Engineer, and Developer
+> Relations roles at platforms I've already integrated.
 
 ## Stack
 
@@ -20,7 +23,6 @@ Personal portfolio for Andrew Wendling, deployed at
 - **Email**: Resend (with React Email templates)
 - **Validation**: Zod 4
 - **IP enrichment**: IPinfo Lite (free tier)
-- **Search analytics**: Google Search Console API (service account)
 - **Hosting**: Vercel (Analytics + Speed Insights)
 
 ## Features
@@ -39,8 +41,7 @@ Personal portfolio for Andrew Wendling, deployed at
   failed logins
 - **Analytics** — daily visitors chart, top pages with avg read time,
   top referrers / countries / browsers / OS, new vs returning, plus
-  Google Search Console data (top queries, CTR, average position) when
-  configured
+  a deep link out to Google Search Console for query / impression data
 - **Visitors** — sessions grouped by browser, with full page chains and
   drill-down to a per-page timeline
 - **Messages** — contact-form submissions
@@ -48,13 +49,19 @@ Personal portfolio for Andrew Wendling, deployed at
 
 ### Security posture
 
-- HMAC-SHA256 signed session cookies (key derived from `ADMIN_PASSWORD`)
-- Timing-safe password comparison
+- DB-backed admin sessions with rotation on login + revocation on logout
+  (cookie holds a 256-bit random token; only its SHA-256 hash is persisted,
+  so a leaked DB row can't be used to forge a valid cookie)
+- Wiping `admin_sessions` immediately revokes every active session
+- Timing-safe password comparison (both sides hashed to fixed length first)
 - Cookie auth gated by `proxy.ts` for everything under `/admin/*`
+- Nonce-based CSP — per-request nonce on `script-src`; `'unsafe-inline'`
+  fully removed from script-src
 - Rate limits: login (5 fails / 15 min / IP), contact form (5 / hour / IP),
-  view tracking (60 / min / IP)
+  view tracking (60 / min / IP), dwell beacons (30 / min / session)
 - IPs are HMAC-hashed before storage; no raw IPs are ever persisted
-- CSP, HSTS preload, COOP, CORP, X-Frame-Options DENY, X-Content-Type-Options
+- HSTS preload, COOP, CORP (route-scoped to keep OG share cards working),
+  X-Frame-Options DENY, X-Content-Type-Options, Referrer-Policy strict-origin
 - CSRF defense on `/api/logout` (Sec-Fetch-Site + Origin checks)
 - Session-scoped authz on `/api/views/dwell`
 
@@ -87,8 +94,6 @@ src/
     visitor.ts         Visitor cookie + IP hashing
     ipinfo.ts          IPinfo Lite client + cloud-ASN bot detection
     rate-limit.ts      DB-backed rate limits
-    google-jwt.ts      Service-account JWT for Google APIs
-    search-console.ts  Search Console API client
     analytics-queries.ts
   emails/              React Email templates
   proxy.ts             /admin/* auth gate (Next.js proxy/middleware)
@@ -130,6 +135,7 @@ drizzle/0000_init.sql                  # views, messages
 drizzle/0001_visits.sql                # visit logging
 drizzle/0002_visitor_tracking.sql      # session/IP/org enrichment + login_attempts
 drizzle/0003_messages_ip_hash.sql      # rate-limit support for contact form
+drizzle/0004_admin_sessions.sql        # server-side admin sessions (rotate + revoke)
 ```
 
 ## Environment variables
@@ -145,8 +151,6 @@ are missing. See [`.env.example`](.env.example) for the canonical list.
 | `RESEND_API_KEY` | Outbound email | Contact form delivery |
 | `RESEND_FROM_EMAIL` | Verified sender | Contact form (optional override) |
 | `IPINFO_TOKEN` | IPinfo Lite token for org/ASN lookup | "Top organizations" admin signal |
-| `GOOGLE_SERVICE_ACCOUNT_KEY` | Search Console JSON key (entire file as one string) | Search Console panel in admin |
-| `SEARCH_CONSOLE_SITE_URL` | Property URL, e.g. `https://andrewwendling.info/` | Search Console panel |
 | `GITHUB_TOKEN` | Fine-grained PAT, public_repo scope | Pinned-repos integration (planned) |
 | `SPOTIFY_CLIENT_ID` / `_SECRET` / `_REFRESH_TOKEN` | Now-playing widget (planned) | `/uses` widget |
 
