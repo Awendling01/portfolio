@@ -7,7 +7,7 @@ import LoginForm from "@/components/auth/LoginForm";
 import {
   safeNextPath,
   SESSION_COOKIE_NAME,
-  verifySessionValue,
+  verifySession,
 } from "@/lib/auth";
 
 export const metadata: Metadata = {
@@ -27,7 +27,7 @@ export default async function LoginPage({ searchParams }: Props) {
 
   const cookieStore = await cookies();
   const session = cookieStore.get(SESSION_COOKIE_NAME)?.value;
-  if (verifySessionValue(session)) {
+  if (await verifySession(session)) {
     redirect(next);
   }
 

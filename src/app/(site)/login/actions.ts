@@ -3,7 +3,7 @@
 import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 import {
-  createSessionValue,
+  createSession,
   passwordMatches,
   safeNextPath,
   SESSION_COOKIE_NAME,
@@ -85,8 +85,16 @@ export async function login(
     return { status: "error", message: "Incorrect password." };
   }
 
+  // Server-side session record. Rotates on every login (any prior cookie is
+  // orphaned and pruned by the periodic expired-row sweep). Wiping the
+  // `admin_sessions` table revokes every active session immediately.
+  const sessionToken = await createSession({
+    ipHash,
+    userAgent,
+  });
+
   const cookieStore = await cookies();
-  cookieStore.set(SESSION_COOKIE_NAME, createSessionValue(), {
+  cookieStore.set(SESSION_COOKIE_NAME, sessionToken, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
