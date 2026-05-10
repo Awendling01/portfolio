@@ -1,9 +1,10 @@
 import { engineeringHighlights, salesHighlights } from "@/lib/content";
+import Card from "@/components/ui/Card";
 
 export default function TwoCareers() {
   return (
     <div className="grid md:grid-cols-2 gap-6">
-      <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)]/80 p-7 sm:p-8">
+      <Card hover={false}>
         <div className="flex items-center gap-2 mb-4">
           <span className="w-2 h-2 rounded-full bg-[var(--accent)]" />
           <span className="mono text-[11px] uppercase tracking-[0.2em] text-[var(--accent)]">
@@ -15,7 +16,7 @@ export default function TwoCareers() {
         </h3>
         <p className="mt-2 text-sm text-[var(--text)] leading-relaxed">
           Multi-tenant SaaS, payments, real-time messaging, AI integrations, and
-          1,850+ tests behind production-grade Laravel and Next.js stacks.
+          1,852+ tests behind production-grade Laravel and Next.js stacks.
         </p>
         <ul className="mt-5 space-y-2">
           {engineeringHighlights.map((h) => (
@@ -28,9 +29,9 @@ export default function TwoCareers() {
             </li>
           ))}
         </ul>
-      </div>
+      </Card>
 
-      <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)]/80 p-7 sm:p-8">
+      <Card hover={false}>
         <div className="flex items-center gap-2 mb-4">
           <span className="w-2 h-2 rounded-full bg-[var(--green)]" />
           <span className="mono text-[11px] uppercase tracking-[0.2em] text-[var(--green)]">
@@ -55,7 +56,7 @@ export default function TwoCareers() {
             </li>
           ))}
         </ul>
-      </div>
+      </Card>
     </div>
   );
 }
