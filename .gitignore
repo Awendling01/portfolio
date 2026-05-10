@@ -24,6 +24,13 @@
 .DS_Store
 *.pem
 
+# local agent / planning state — never commit
+.claude/
+# Root-only: ignore the local resume-prep notes dir at /case-studies/.
+# Anchored with a leading slash so it does NOT match src/lib/case-studies/
+# (that's source code, not notes).
+/case-studies/
+
 # debug
 npm-debug.log*
 yarn-debug.log*

@@ -1,34 +1,13 @@
 import type { NextConfig } from "next";
 
-// CSP allows exactly what this site loads:
-// - Vercel Analytics + Speed Insights (va.vercel-scripts.com, vitals.vercel-insights.com)
-// - Google Fonts via next/font (self-hosted by next/font, no runtime origins needed)
-// 'unsafe-inline' on style-src is required for Tailwind/Next's hashed inline
-// styles. 'unsafe-inline' on script-src covers Next's small bootstrap scripts;
-// removing it would require nonce-based CSP.
-const csp = [
-  "default-src 'self'",
-  "script-src 'self' 'unsafe-inline' https://va.vercel-scripts.com",
-  "connect-src 'self' https://vitals.vercel-insights.com https://va.vercel-scripts.com https://vercel.live",
-  // Spotify album art (https://i.scdn.co) loaded by SpotifyNowPlaying when
-  // the integration is configured. Wildcard covers other scdn.co subdomains
-  // (mosaic.scdn.co, dailymix-images.scdn.co, etc.) Spotify rotates between.
-  "img-src 'self' data: blob: https://*.scdn.co",
-  "style-src 'self' 'unsafe-inline'",
-  "font-src 'self' data:",
-  "frame-ancestors 'none'",
-  "base-uri 'self'",
-  "form-action 'self'",
-  "object-src 'none'",
-  "upgrade-insecure-requests",
-].join("; ");
-
+// Static security headers applied to every response. The Content-Security-
+// Policy header is intentionally NOT set here — it's built per-request in
+// `src/proxy.ts` so it can carry a per-request nonce on script-src.
 const securityHeaders = [
   {
     key: "Strict-Transport-Security",
     value: "max-age=63072000; includeSubDomains; preload",
   },
-  { key: "Content-Security-Policy", value: csp },
   { key: "X-Content-Type-Options", value: "nosniff" },
   { key: "X-Frame-Options", value: "DENY" },
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
@@ -48,12 +27,37 @@ const nextConfig: NextConfig = {
         source: "/:path*",
         headers: securityHeaders,
       },
-      // The OG image is meant to be embedded by third parties (Twitter,
+      // OG images are meant to be embedded by third parties (Twitter,
       // LinkedIn, Slack, iMessage, link previewers). The default CORP value
-      // above blocks cross-origin fetches; this override lets share cards
-      // actually render the image.
+      // above blocks cross-origin fetches; these overrides let share cards
+      // actually render the image. Two routes today: the root OG and the
+      // per-slug case-study OG. Add new patterns here whenever a new OG
+      // image route lands.
       {
         source: "/opengraph-image",
+        headers: [
+          { key: "Cross-Origin-Resource-Policy", value: "cross-origin" },
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+        ],
+      },
+      {
+        // Case-study OG images at /work/moniscope/{slug}/opengraph-image-*.
+        // Next emits a build-hash suffix on the served path, so match any
+        // file under the slug whose name starts with "opengraph-image-".
+        source: "/work/moniscope/:slug/:image(opengraph-image-[a-zA-Z0-9_-]+)",
+        headers: [
+          { key: "Cross-Origin-Resource-Policy", value: "cross-origin" },
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+        ],
+      },
+      {
+        source: "/work/kiosk/:slug/:image(opengraph-image-[a-zA-Z0-9_-]+)",
         headers: [
           { key: "Cross-Origin-Resource-Policy", value: "cross-origin" },
           {
