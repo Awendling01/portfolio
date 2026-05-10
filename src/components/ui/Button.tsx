@@ -8,7 +8,13 @@ type Props = {
   variant?: Variant;
   children: ReactNode;
   external?: boolean;
-} & Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "href">;
+  /**
+   * When true, renders a plain `<a download>` (skipping next/link). Use for
+   * static file downloads — e.g. /resume.pdf — so the browser handles them
+   * as downloads rather than navigations.
+   */
+  download?: boolean;
+} & Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "href" | "download">;
 
 const baseStyles =
   "inline-flex items-center justify-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium tracking-tight whitespace-nowrap transition-all duration-200 will-change-transform";
@@ -25,15 +31,22 @@ export default function Button({
   href,
   variant = "primary",
   external,
+  download,
   className = "",
   children,
   ...rest
 }: Props) {
   const classes = `${baseStyles} ${variantStyles[variant]} ${className}`;
-  if (external || /^https?:\/\//.test(href) || href.startsWith("mailto:")) {
+  if (
+    download ||
+    external ||
+    /^https?:\/\//.test(href) ||
+    href.startsWith("mailto:")
+  ) {
     return (
       <a
         href={href}
+        download={download ? "" : undefined}
         target={external ? "_blank" : undefined}
         rel={external ? "noopener noreferrer" : undefined}
         className={classes}

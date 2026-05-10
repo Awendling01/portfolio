@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Outfit, Fira_Code } from "next/font/google";
+import { headers } from "next/headers";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
@@ -7,7 +8,7 @@ import "./globals.css";
 const outfit = Outfit({
   variable: "--font-outfit",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800"],
+  weight: ["300", "400", "500", "600", "700", "800", "900"],
   display: "swap",
 });
 
@@ -21,11 +22,11 @@ const firaCode = Fira_Code({
 export const metadata: Metadata = {
   metadataBase: new URL("https://andrewwendling.info"),
   title: {
-    default: "Andrew Wendling — Full-Stack Engineer + Sales Background",
+    default: "Andrew Wendling — Full-Stack Engineer with Top-3% Sales Background",
     template: "%s | Andrew Wendling",
   },
   description:
-    "Full-stack software engineer with 5+ years building SaaS platforms and 6+ years sales experience. Open to Developer, Solutions Engineer, and Customer Success Manager roles.",
+    "Full-stack engineer with 5+ years shipping production SaaS — Laravel, Next.js, multi-tenant architecture, integrations against Shopify, Stripe, Twilio, Klaviyo, Recharge, Plaid, EZPost, and Google Business Profile. Top-3% national sales background. Open to Solutions Engineer, Implementation Engineer, and Developer Relations roles.",
   applicationName: "Andrew Wendling",
   authors: [{ name: "Andrew Wendling" }],
   creator: "Andrew Wendling",
@@ -33,20 +34,23 @@ export const metadata: Metadata = {
     "Andrew Wendling",
     "Full-Stack Developer",
     "Solutions Engineer",
-    "Sales Engineer",
-    "Customer Success Manager",
+    "Implementation Engineer",
+    "Developer Relations",
     "Laravel",
     "Next.js",
     "Vue",
     "React",
     "TypeScript",
-    "Nashville",
+    "Shopify",
+    "Stripe",
+    "Twilio",
+    "Klaviyo",
     "Spanish Fort",
   ],
   openGraph: {
-    title: "Andrew Wendling — Full-Stack Engineer + Sales Background",
+    title: "Andrew Wendling — Full-Stack Engineer with Top-3% Sales Background",
     description:
-      "Full-stack engineer with 5+ years shipping production SaaS, plus 6 years in sales — top 3% nationally. Open to Dev, SE, and CSM roles.",
+      "5+ years shipping production SaaS — Laravel, Next.js, multi-tenant SaaS, AI integrations. Built against Shopify, Stripe, Twilio, Klaviyo, Recharge, Plaid, EZPost, Google Business Profile. Top-3% national sales background. Open to SE / IE / DevRel.",
     url: "https://andrewwendling.info",
     siteName: "Andrew Wendling",
     locale: "en_US",
@@ -54,9 +58,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Andrew Wendling — Full-Stack Engineer + Sales Background",
+    title: "Andrew Wendling — Full-Stack Engineer with Top-3% Sales Background",
     description:
-      "Full-stack engineer with 5+ years shipping production SaaS, plus 6 years in sales — top 3% nationally. Open to Dev, SE, and CSM roles.",
+      "5+ years shipping production SaaS — Laravel, Next.js, multi-tenant SaaS, AI integrations. Built against Shopify, Stripe, Twilio, Klaviyo, Recharge, Plaid, EZPost, Google Business Profile. Top-3% national sales background. Open to SE / IE / DevRel.",
   },
   robots: { index: true, follow: true },
   verification: {
@@ -70,11 +74,15 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Per-request CSP nonce set by the proxy. Inline scripts must carry it,
+  // otherwise the strict CSP blocks them.
+  const nonce = (await headers()).get("x-nonce") ?? undefined;
+
   return (
     <html
       lang="en"
@@ -87,6 +95,11 @@ export default function RootLayout({
         {/* JSON-LD Person schema. Helps Google build a Knowledge Panel for
             "Andrew Wendling" and signals identity to AI search tools. */}
         <script
+          nonce={nonce}
+          // The browser strips `nonce` from the DOM once CSP has applied,
+          // so React hydration sees nonce="" and complains. The mismatch is
+          // cosmetic — the real nonce was applied at parse time. Suppress.
+          suppressHydrationWarning
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
@@ -94,10 +107,10 @@ export default function RootLayout({
               "@type": "Person",
               name: "Andrew Wendling",
               url: "https://andrewwendling.info",
-              image: "https://andrewwendling.info/opengraph-image",
+              image: "https://andrewwendling.info/headshot.png",
               jobTitle: "Full-Stack Software Engineer",
               description:
-                "Full-stack engineer with 5+ years shipping production SaaS and 6+ years sales experience. Open to Developer, Solutions Engineer, Sales Engineer, and Customer Success Manager roles.",
+                "Full-stack engineer with 5+ years shipping production SaaS — built integrations against Shopify, Stripe, Twilio, Klaviyo, Recharge, Plaid, EZPost, and Google Business Profile. Top-3% national sales background. Open to Solutions Engineer, Implementation Engineer, and Developer Relations roles.",
               address: {
                 "@type": "PostalAddress",
                 addressLocality: "Spanish Fort",
@@ -116,9 +129,14 @@ export default function RootLayout({
                 "React",
                 "Vue",
                 "Multi-Tenant SaaS",
+                "Shopify Integrations",
+                "Stripe Integrations",
+                "Twilio SMS",
+                "Klaviyo Automation",
+                "Recharge Subscriptions",
                 "Solutions Engineering",
-                "Customer Success",
-                "Sales Engineering",
+                "Implementation Engineering",
+                "Developer Relations",
               ],
             }),
           }}
