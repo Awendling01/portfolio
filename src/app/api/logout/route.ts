@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import { SESSION_COOKIE_NAME } from "@/lib/auth";
+import { SESSION_COOKIE_NAME, revokeSession } from "@/lib/auth";
 
 export const runtime = "nodejs";
 
@@ -32,6 +32,10 @@ export async function POST(request: Request) {
   }
 
   const cookieStore = await cookies();
+  const existing = cookieStore.get(SESSION_COOKIE_NAME)?.value;
+  // Revoke server-side first, then drop the cookie. If the DB delete fails,
+  // the cookie still gets cleared so the user is logged out client-side.
+  await revokeSession(existing);
   cookieStore.delete(SESSION_COOKIE_NAME);
   return NextResponse.redirect(new URL("/", request.url), {
     status: 303,

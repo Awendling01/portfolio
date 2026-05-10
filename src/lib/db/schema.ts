@@ -79,3 +79,23 @@ export const loginAttempts = pgTable(
     ipHashIdx: index("login_attempts_ip_hash_idx").on(t.ipHash),
   }),
 );
+
+export const adminSessions = pgTable(
+  "admin_sessions",
+  {
+    id: serial("id").primaryKey(),
+    tokenHash: text("token_hash").notNull().unique(),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+    expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
+    lastSeenAt: timestamp("last_seen_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+    userAgent: text("user_agent"),
+    ipHash: text("ip_hash"),
+  },
+  (t) => ({
+    expiresAtIdx: index("admin_sessions_expires_at_idx").on(t.expiresAt),
+  }),
+);
