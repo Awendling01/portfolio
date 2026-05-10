@@ -23,24 +23,28 @@ export default function Home() {
           <div className="max-w-3xl">
             <span className="inline-flex items-center gap-2 rounded-full border border-[var(--green)]/40 bg-[var(--green)]/10 px-3.5 py-1.5 mono text-[11px] uppercase tracking-[0.18em] text-[var(--green)]">
               <span className="relative inline-flex w-2 h-2 rounded-full bg-[var(--green)] pulse-dot" />
-              Open to Developer · SE · CSM Roles
+              Open to Engineering / SE / IE / DevRel / CSM
             </span>
 
-            <h1 className="mt-6 text-[40px] leading-[1.05] sm:text-[64px] sm:leading-[1.04] font-extrabold tracking-[-0.025em] text-white">
-              Five years building.
-              <br />
-              Six years selling.
-              <br />
-              Engineer who can{" "}
-              <span className="shimmer">carry a quota</span>.
+            <h1 className="mt-6 text-[clamp(30px,9vw,64px)] leading-[1.08] sm:leading-[1.04] font-extrabold tracking-[-0.025em] text-white break-words">
+              <span className="block">
+                <span className="digit-accent">5</span> years engineering.
+              </span>
+              <span className="block">
+                <span className="digit-accent">6</span> years in sales before
+                that.
+              </span>
+              <span className="block">
+                Engineer who can{" "}
+                <span className="shimmer">carry a quota</span>.
+              </span>
             </h1>
 
             <p className="mt-7 text-base sm:text-lg text-[var(--text)] max-w-2xl leading-relaxed">
-              Full-stack engineer with 5+ years shipping production SaaS — and
-              6+ years before that selling, coaching, and leading sales teams to
-              top-3% national performance. I move easily between architecture
-              decisions, customer conversations, and the messy middle where
-              software and revenue actually meet.
+              Production integrations against Shopify, Stripe, Twilio, Klaviyo,
+              Recharge, Plaid, EZPost, and Google Business Profile. Six years
+              in customer-facing sales before any engineering — top 3%
+              nationally at AT&amp;T, team lead at T-Mobile.
             </p>
 
             <div className="mt-7 flex flex-wrap gap-2">
@@ -156,8 +160,8 @@ export default function Home() {
           <ScrollReveal>
             <SectionHeader
               tag="What I Bring"
-              title="The combination engineering teams keep saying they need"
-              subtitle="Production AI, multi-tenant architecture, customer-facing instincts, and a sales background that means you don't have to teach me how to talk to revenue."
+              title="Production engineering, plus the customer instinct most engineers learn after the hire"
+              subtitle="Multi-tenant SaaS architecture, AI integrations, and integrations against the platforms SE / IE / DevRel teams sell against — Shopify, Stripe, Twilio, Klaviyo, Recharge, Plaid, EZPost, Google Business Profile."
             />
           </ScrollReveal>
           <ScrollReveal>
@@ -176,9 +180,13 @@ export default function Home() {
               subtitle="A snapshot of recent work — full case studies on the work page."
             />
           </ScrollReveal>
-          <div className="grid lg:grid-cols-2 gap-6">
+          <div className="grid lg:grid-cols-2 gap-6 auto-rows-fr">
             {featured.map((p, i) => (
-              <ScrollReveal key={p.slug} delay={i * 80}>
+              <ScrollReveal
+                key={p.slug}
+                delay={i * 80}
+                className="h-full"
+              >
                 <ProjectCard project={p} />
               </ScrollReveal>
             ))}
@@ -196,9 +204,9 @@ export default function Home() {
         <Container>
           <ScrollReveal>
             <SectionHeader
-              tag="Two Careers, One Hire"
-              title="Engineering depth + 6 years of sales leadership"
-              subtitle="The combination that makes Solutions Engineering, Sales Engineering, and Customer Success natural fits."
+              tag="The Combination"
+              title="5+ years of engineering with a sales career underneath"
+              subtitle="Not a transition — a multiplier. Engineering is the work. Sales is why I can sit in a customer call and ship the integration the same week."
             />
           </ScrollReveal>
           <ScrollReveal>
@@ -223,7 +231,8 @@ export default function Home() {
         </Container>
       </section>
 
-      {/* GitHub */}
+      {/* GitHub — hidden while deciding which repos to pin */}
+      {/*
       <section className="py-20 sm:py-24">
         <Container>
           <ScrollReveal>
@@ -246,6 +255,7 @@ export default function Home() {
           </ScrollReveal>
         </Container>
       </section>
+      */}
 
       {/* CTA */}
       <section className="py-20 sm:py-28">
@@ -265,9 +275,11 @@ export default function Home() {
                   Let&apos;s talk.
                 </h2>
                 <p className="mt-4 text-[var(--text)] max-w-xl mx-auto leading-relaxed">
-                  I&apos;m actively looking for Developer, Solutions Engineer,
-                  Sales Engineer, and Customer Success Manager roles. Based in
-                  Spanish Fort, AL — open to remote and relocation.
+                  Full-stack engineering, Solutions Engineer, Implementation
+                  Engineer, Developer Relations, Customer Success — or any
+                  engineer- or customer-facing role where production code and
+                  a sales-trained ear both matter. Based in Spanish Fort, AL
+                  · open to remote and relocation.
                 </p>
                 <div className="mt-8 flex flex-wrap justify-center gap-3">
                   <Button href="/contact">Send a message</Button>

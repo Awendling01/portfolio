@@ -25,9 +25,13 @@ export default function UsesPage() {
 
       <section className="pb-24">
         <Container>
-          <div className="grid md:grid-cols-2 gap-5">
+          <div className="grid md:grid-cols-2 gap-5 auto-rows-fr">
             {uses.map((group, i) => (
-              <ScrollReveal key={group.category} delay={(i % 2) * 60}>
+              <ScrollReveal
+                key={group.category}
+                delay={(i % 2) * 60}
+                className="h-full"
+              >
                 <div className="h-full rounded-2xl border border-[var(--border)] bg-[var(--surface)]/80 p-7">
                   <div className="mono text-[11px] uppercase tracking-[0.2em] text-[var(--accent)]">
                     {group.category}
