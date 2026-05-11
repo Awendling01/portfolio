@@ -26,14 +26,14 @@ export const projects: Project[] = [
     dates: "October 2025 – Present",
     role: "Founder / Sole Engineer",
     description:
-      "Multi-tenant vertical SaaS for the self-storage industry, built for Spanish Fort Self Storage — my family's operation — and designed to serve operators beyond it. I run product, architecture, and engineering. Claude Code is wired in as a structured development partner: multi-session architectural sweeps, JSON handoff logs, and 1,852+ automated tests as the validation gate. Currently pre-launch.",
+      "Multi-tenant vertical SaaS for self-storage. Built for my family's operation; designed for operators beyond. Founder + sole engineer; pre-launch.",
     highlights: [
       "Multi-tenant Laravel + Vue + Inertia.js SaaS with 1,852+ automated tests as the validation gate",
       "9-stage delinquency state machine implementing Alabama lien law with cure-period enforcement",
       "Two-way SMS via Twilio over Reverb WebSockets — outbound, inbound webhook, opt-out/UNSTOP compliance",
       "Stripe billing + Plaid bank verification with full audit-trail logging",
       "Yield-pricing engine, 6-report engine, CRM Kanban — all on a single rules + dispatcher pattern",
-      "Anthropic-powered Brain (deterministic-first) and Claude Code as structured dev partner",
+      "Anthropic Brain (deterministic-first); Claude Code as dev partner (multi-session sweeps, JSON logs)",
     ],
     metrics: [
       { value: "1,852+", label: "Automated Tests" },
@@ -102,14 +102,14 @@ export const projects: Project[] = [
     dates: "March 2026 – April 2026",
     role: "Sole Technical Consultant",
     description:
-      "Concurrent engagement with a local service business. Owned Google Business Profile optimization, listings cleanup, and local SEO strategy. Scope expanded mid-engagement after identifying gaps the original brief didn't cover.",
+      "Concurrent engagement with a local service business. Owned Google Business Profile, listings cleanup, and local SEO. Scope expanded mid-engagement.",
     highlights: [
-      "Google Business Profile optimization end-to-end: photos, hours, services, posts cadence",
-      "Local SEO strategy and listings cleanup across primary + secondary directories",
-      "Schema.org JSON-LD structured data for richer search snippets and rich results",
-      "Analytics 4 instrumentation with funnel tracking from search → call/visit",
-      "Identified and scoped upsell work mid-engagement after gaps in the original brief",
-      "Concurrent with the kiosk + Shopify engagement on the same two-month consulting sprint",
+      "GA4 + custom conversion-event tracking site-wide; title tags + meta descriptions across 8 pages",
+      "Google Business Profile: 750-char description + 7 unit-size product descriptions + 6-city service area",
+      "JSON-LD schema audit (AggregateRating, BreadcrumbList, FAQPage) + platform-limitation workarounds",
+      "NAP cleanup across 6+ aggregator directories (SelfStorage.com, Yelp, Apple Maps, RentCafe, BBB, Nextdoor)",
+      "Custom JS quarterly owner-report generator (docx npm, 15-page PDF) with revenue, RevPAU, market comps",
+      "Diagnosed call-volume decline as March 2026 Google Core Update AI Local Pack restructure (call-button omission)",
     ],
     metrics: [
       { value: "+350%", label: "Calls" },
@@ -120,9 +120,10 @@ export const projects: Project[] = [
     tech: [
       "Google Business Profile",
       "Local SEO",
+      "GA4 + Conversion Tracking",
+      "JSON-LD",
       "Listings Management",
-      "Schema.org",
-      "Analytics 4",
+      "Node.js (docx)",
     ],
     featured: true,
   },
@@ -178,7 +179,7 @@ export const projects: Project[] = [
     role: "Software Developer",
     company: "Trabian / MVB Bank (Remote)",
     description:
-      "Developed fintech and digital banking applications using React, React Native, and GraphQL for a software consultancy specializing in financial technology. Built cross-platform mobile and web interfaces for banking clients in a regulated, compliance-driven environment.",
+      "Built cross-platform fintech and digital banking applications (React, React Native, GraphQL) for a regulated, compliance-driven banking consultancy.",
     highlights: [
       "Cross-platform banking interfaces shipped to iOS, Android, and Web from one codebase",
       "Regulated, compliance-driven environment with staged release cycles and quality gates",
@@ -269,6 +270,12 @@ export const education = [
     institution: "Columbia State Community College",
     dates: "2019 – 2021",
     note: "GPA: 3.97, Dean's List",
+  },
+  {
+    title: "API Documentation Path",
+    institution: "Postman",
+    dates: "May 2026",
+    note: "Credential ID: hz86ci8ajava",
   },
   {
     title: "API Prototyping Learning Path",
