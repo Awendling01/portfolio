@@ -87,24 +87,44 @@ export default async function AdminIndex() {
           value={visitTotals.humanSessions7d}
           tone="accent"
           sub={`${visitTotals.humans7d} pageviews`}
+          info={{
+            has: "The count of distinct human browser sessions that hit the public site in the last 7 days. The sub-line shows total pageviews in the same window — sessions counts unique browsers, pageviews counts each page load (one session can contribute many pageviews).",
+            does: "Tells you roughly how many recent visitors you've had. Sessions is closer to 'people' than pageviews is — one person reading three pages back-to-back is one session, three pageviews. The two together give a quick read on volume vs. depth of engagement.",
+            how: "Computed in loadStats() at the top of src/app/(site)/admin/page.tsx. SQL is `count(distinct session_id) filter (where session_id is not null and created_at > now() - interval '7 days' and is_bot = false)` from the visits table. Sessions are identified by the httpOnly 'vid' cookie set on first visit (90-day UUID, see src/lib/visitor.ts). Bots are excluded via the is_bot flag set at insert time by src/lib/bot.ts (UA regex + cloud-ASN heuristic).",
+          }}
         />
         <Stat
           label="Corporate sessions"
           value={visitTotals.corpSessions7d}
           tone="accent2"
           sub="last 30d, with org info"
+          info={{
+            has: "The count of distinct human browser sessions in the last 30 days whose IP enrichment returned a non-residential 'as_domain' value — i.e., the visitor's IP belongs to a corporate ASN, not a consumer ISP. Recruiter signal: someone scoping you out from a company network.",
+            does: "Flags visits coming from corporate networks vs. residential ones. Useful for noticing when a hiring manager at $company is reading your portfolio from their office. Not every corp visit is a recruiter, and not every recruiter visit comes from corp IP (they might be on home wifi), but the trendline is suggestive.",
+            how: "loadStats() in src/app/(site)/admin/page.tsx. SQL counts distinct session_id where as_domain is not null and is_bot = false over the 30-day window. The as_domain value is populated at visit-insert time by src/lib/ipinfo.ts (calls IPinfo Lite API, see IPINFO_TOKEN env var). The full per-org breakdown lives in the 'Top organizations' table further down this page.",
+          }}
         />
         <Stat
           label="Bot pings"
           value={visitTotals.bots}
           tone="amber"
           sub="all time"
+          info={{
+            has: "All-time count of visits where the bot detector flagged the request as automated. Includes search crawlers (Googlebot, Bingbot), link-preview fetchers (Slackbot, Twitterbot, LinkedInBot), uptime monitors, and headless scrapers.",
+            does: "Confirms your site is actually being crawled and indexed (high bot count from Googlebot = SEO is working) and lets you eyeball whether bot traffic is dominating the analytics. The other admin stats all exclude bots, so this is the only place bot volume is surfaced directly.",
+            how: "loadStats() in src/app/(site)/admin/page.tsx. SQL is `count(*) filter (where is_bot = true)` from visits. The is_bot flag is set at insert time by classifyVisitor() in src/lib/bot.ts — combines a User-Agent regex (matching ~30 known bot strings) with a cloud-ASN heuristic (datacenter IPs from AWS/GCP/Azure/etc. are flagged even with a forged browser UA).",
+          }}
         />
         <Stat
           label="Failed logins (24h)"
           value={loginStats.failures24h}
           tone={loginStats.failures24h > 0 ? "rose" : "muted"}
           sub={`${loginStats.uniqueAttackers7d} unique IPs (7d)`}
+          info={{
+            has: "The count of failed password attempts on /login in the last 24 hours. The sub-line shows the count of distinct hashed IPs that have produced any failed attempt over the past 7 days — i.e., how many different actors are probing.",
+            does: "First-line indicator of password-guessing activity against the admin gate. A non-zero 24h count means someone tried and failed recently; a steady stream of unique IPs suggests a distributed attempt. Drill into /admin/security for the full per-attempt timeline.",
+            how: "loadStats() in src/app/(site)/admin/page.tsx. SQL queries the login_attempts table (one row per login POST, written by the server action in src/app/(site)/login/actions.ts). Counts rows where succeeded = false within the relevant time window. IPs are HMAC-hashed before storage (src/lib/visitor.ts hashIp() with the VISIT_HASH_SECRET env var) so the raw IP is never persisted. /login itself is rate-limited at 5 failed attempts per IP per 15 minutes, see src/lib/rate-limit.ts.",
+          }}
         />
       </div>
 
