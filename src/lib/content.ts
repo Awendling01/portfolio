@@ -136,14 +136,14 @@ export const projects: Project[] = [
     role: "Full Stack Developer",
     company: "FutureShirts, Nashville, TN",
     description:
-      "Contributed extensively to an internal ERP and Inventory Management platform for a full-service entertainment merchandise company processing 200,000+ packages annually across 55+ artist storefronts serving 1.4M+ fans monthly. Reported to the SVP of IT.",
+      "Contributed extensively to an internal ERP / IMS for a full-service entertainment merchandise company. Reported to the SVP of IT.",
     highlights: [
-      "Carrier API integration (USPS, FedEx, DHL) via EZPost with webhook event handling",
-      "Shopify GraphQL integrations across 55+ storefronts (live product / order data)",
-      "atVenu live-event POS data sync for tour merchandise",
+      "Carrier API integration (USPS, FedEx, DHL) via EZPost with webhook event handling + Google Maps Geocoding for address validation",
+      "Shopify GraphQL integrations across 55+ artist storefronts (live product / order data)",
+      "Codebase-wide Vue 2 → 3 Composition API migration",
       "Reporting dashboards for finance + operations teams",
       "Supporting role on inVia Robotics warehouse automation (daily monitoring)",
-      "Full SDLC on a hybrid team: Jira sprints, daily standups, code reviews, CI/CD, mentored juniors",
+      "Domain-Driven Design Laravel (action classes / events / repository pattern); sprint-planning input + Cypress mentoring of a junior dev",
     ],
     metrics: [
       { value: "200K+", label: "Annual Shipments" },
@@ -160,6 +160,7 @@ export const projects: Project[] = [
       "Next.js",
       "GraphQL",
       "Shopify",
+      "Google Maps API",
       "MySQL",
       "Cypress",
       "Pest/PHPUnit",

@@ -17,6 +17,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE}/work/shopify/ai-pipeline`, lastModified: now, priority: 0.75 },
     { url: `${SITE}/work/shopify/prompt-engineering`, lastModified: now, priority: 0.75 },
     { url: `${SITE}/work/shopify/personalization`, lastModified: now, priority: 0.75 },
+    { url: `${SITE}/work/futureshirts`, lastModified: now, priority: 0.85 },
     { url: `${SITE}/about`, lastModified: now, priority: 0.8 },
     { url: `${SITE}/uses`, lastModified: now, priority: 0.5 },
     { url: `${SITE}/contact`, lastModified: now, priority: 0.7 },

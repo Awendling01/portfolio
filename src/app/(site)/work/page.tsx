@@ -42,6 +42,7 @@ const groups: { tag: string; title: string; slugs: string[] }[] = [
 function detailHref(slug: string): string | undefined {
   if (slug === "moniscope") return "/work/moniscope";
   if (slug === "offroad-kiosk") return "/work/shopify";
+  if (slug === "futureshirts-erp") return "/work/futureshirts";
   return undefined;
 }
 
