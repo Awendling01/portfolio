@@ -21,33 +21,42 @@ export default function Home() {
       <section className="relative pt-36 pb-24 sm:pt-44 sm:pb-32">
         <Container>
           <div className="max-w-3xl">
-            <span className="inline-flex items-center gap-2 rounded-full border border-[var(--green)]/40 bg-[var(--green)]/10 px-3.5 py-1.5 mono text-[11px] uppercase tracking-[0.18em] text-[var(--green)]">
-              <span className="relative inline-flex w-2 h-2 rounded-full bg-[var(--green)] pulse-dot" />
-              Open to Engineering / SE / IE / DevRel / CSM
-            </span>
-
-            <h1 className="mt-6 text-[clamp(30px,9vw,64px)] leading-[1.08] sm:leading-[1.04] font-extrabold tracking-[-0.025em] text-white break-words">
+            <h1 className="text-[clamp(30px,9vw,64px)] leading-[1.08] sm:leading-[1.04] font-extrabold tracking-[-0.025em] text-white break-words">
               <span className="block">
-                <span className="digit-accent">5</span> years engineering.
+                <span className="digit-accent">5+</span> years engineering.
               </span>
               <span className="block">
-                <span className="digit-accent">6</span> years in sales before
-                that.
+                <span className="digit-accent">6+</span> years in sales
+                leadership.
               </span>
-              <span className="block">
+              <span className="block mt-3">
                 Engineer who can{" "}
                 <span className="shimmer">carry a quota</span>.
               </span>
             </h1>
 
-            <p className="mt-7 text-base sm:text-lg text-[var(--text)] max-w-2xl leading-relaxed">
-              Production integrations against Shopify, Stripe, Twilio, Klaviyo,
-              Recharge, Plaid, EZPost, and Google Business Profile. Six years
-              in customer-facing sales before any engineering — top 3%
-              nationally at AT&amp;T, team lead at T-Mobile.
-            </p>
-
             <div className="mt-7 flex flex-wrap gap-2">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-[var(--green)]/40 bg-[var(--green)]/10 px-3 py-1.5 mono text-[10px] uppercase tracking-[0.16em] text-[var(--green)]">
+                <span className="relative inline-flex w-2 h-2 rounded-full bg-[var(--green)] pulse-dot" />
+                Open to Engineering / SE / IE / DevRel / CSM
+              </span>
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-[var(--accent)]/30 bg-[var(--accent)]/10 px-3 py-1.5 mono text-[10px] uppercase tracking-[0.16em] text-[var(--accent)]">
+                <svg
+                  viewBox="0 0 24 24"
+                  className="w-3.5 h-3.5"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                  aria-hidden="true"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244"
+                  />
+                </svg>
+                Shopify · Stripe · Twilio · Klaviyo · Recharge · Plaid · EZPost · Google Business Profile
+              </span>
               <span className="inline-flex items-center gap-1.5 rounded-full border border-[var(--border)] bg-[var(--surface)]/60 px-3 py-1.5 mono text-[10px] uppercase tracking-[0.16em] text-[var(--text2)]">
                 <svg
                   viewBox="0 0 24 24"
@@ -160,8 +169,7 @@ export default function Home() {
           <ScrollReveal>
             <SectionHeader
               tag="What I Bring"
-              title="Production engineering, plus the customer instinct most engineers learn after the hire"
-              subtitle="Multi-tenant SaaS architecture, AI integrations, and integrations against the platforms SE / IE / DevRel teams sell against — Shopify, Stripe, Twilio, Klaviyo, Recharge, Plaid, EZPost, Google Business Profile."
+              title="Production engineering with the customer instinct."
             />
           </ScrollReveal>
           <ScrollReveal>
@@ -187,7 +195,18 @@ export default function Home() {
                 delay={i * 80}
                 className="h-full"
               >
-                <ProjectCard project={p} />
+                <ProjectCard
+                  project={p}
+                  detailHref={
+                    p.slug === "moniscope"
+                      ? "/work/moniscope"
+                      : p.slug === "offroad-kiosk"
+                        ? "/work/shopify"
+                        : p.slug === "futureshirts-erp"
+                          ? "/work/futureshirts"
+                          : undefined
+                  }
+                />
               </ScrollReveal>
             ))}
           </div>
