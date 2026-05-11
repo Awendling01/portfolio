@@ -5,11 +5,11 @@ import InlineCode from "./InlineCode";
 type Props = {
   study: CaseStudy;
   /**
-   * Display label for the parent project (e.g. "MONISCOPE", "AI Trade-Show Kiosk").
+   * Display label for the parent project (e.g. "MONISCOPE", "Off-Roading E-Commerce").
    * Shown in the eyebrow + back-link.
    */
   projectLabel: string;
-  /** URL of the parent project page (e.g. `/work/moniscope` or `/work/kiosk`). */
+  /** URL of the parent project page (e.g. `/work/moniscope` or `/work/shopify`). */
   projectHref: string;
 };
 

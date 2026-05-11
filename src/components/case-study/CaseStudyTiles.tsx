@@ -3,7 +3,7 @@ import type { CaseStudy } from "@/lib/case-studies";
 
 type Props = {
   /**
-   * Base path for the project (e.g. "/work/moniscope" or "/work/kiosk").
+   * Base path for the project (e.g. "/work/moniscope" or "/work/shopify").
    * Each tile links to `${basePath}/${slug}`.
    */
   basePath: string;

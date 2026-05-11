@@ -29,9 +29,9 @@ export async function generateMetadata({
   const study = getKioskCaseStudy(slug);
   if (!study) return { title: "Not found" };
   return {
-    title: `${study.shortTitle} · AI Kiosk case study`,
+    title: `${study.shortTitle} · Off-Roading E-Commerce case study`,
     description: study.oneLiner,
-    alternates: { canonical: `/work/kiosk/${slug}` },
+    alternates: { canonical: `/work/shopify/${slug}` },
   };
 }
 
@@ -53,8 +53,8 @@ export default async function CaseStudyPage({
       <Container>
         <CaseStudyHero
           study={study}
-          projectLabel="AI Trade-Show Kiosk"
-          projectHref="/work/kiosk"
+          projectLabel="Off-Roading E-Commerce"
+          projectHref="/work/shopify"
         />
       </Container>
 
@@ -127,21 +127,21 @@ export default async function CaseStudyPage({
           <div className="flex flex-wrap gap-3">
             {prev ? (
               <Link
-                href={`/work/kiosk/${prev.slug}`}
+                href={`/work/shopify/${prev.slug}`}
                 className="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium tracking-tight rounded-full border border-[var(--border2)] text-[var(--text2)] hover:border-[var(--accent)] hover:text-white transition-all"
               >
                 ← {prev.shortTitle}
               </Link>
             ) : null}
             <Link
-              href="/work/kiosk"
+              href="/work/shopify"
               className="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium tracking-tight rounded-full border border-[var(--border2)] text-[var(--text2)] hover:border-[var(--accent)] hover:text-white transition-all"
             >
               Back to overview
             </Link>
             {next ? (
               <Link
-                href={`/work/kiosk/${next.slug}`}
+                href={`/work/shopify/${next.slug}`}
                 className="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium tracking-tight rounded-full border border-[var(--border2)] text-[var(--text2)] hover:border-[var(--accent)] hover:text-white transition-all"
               >
                 {next.shortTitle} →

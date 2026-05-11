@@ -107,7 +107,7 @@ export default function WhereItShowsUp({ data }: Props) {
 
     case "stats":
       return (
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-px bg-[var(--border)] rounded-xl overflow-hidden border border-[var(--border)]">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-px bg-[var(--border)] rounded-xl overflow-hidden border border-[var(--border)]">
           {data.entries.map((s) => (
             <div
               key={s.label}

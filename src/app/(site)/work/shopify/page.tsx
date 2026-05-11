@@ -17,9 +17,9 @@ import { projects } from "@/lib/content";
 const project = projects.find((p) => p.slug === "offroad-kiosk");
 
 export const metadata: Metadata = {
-  title: "AI Trade-Show Kiosk + Shopify Engagement",
+  title: "Off-Roading E-Commerce Engagement",
   description:
-    "Two-device trade-show kiosk built for an off-roading e-commerce client. Four-model AI image pipeline (gpt-image-1.5, gpt-4o-mini, Claid 4× upscale, Replicate rembg) with a 7-level fallback chain, plus the full Shopify/Klaviyo/Recharge delivery. Two engineering deep-dives — the AI pipeline and the prompt-engineering harness.",
+    "Multi-system Shopify engagement for an off-roading e-commerce client: 61-section admin audit, 3 Klaviyo flows built from scratch (Welcome, Browse Abandonment, Abandoned Cart), custom JavaScript dwell-time tracking feeding 6-path Django conditional upsells, Shopify Flow customer-tagging architecture, JSON-LD schema deployment, 5-email Recharge failed-payment recovery, Meta catalog repair — plus a two-device AI trade-show kiosk proposed and built mid-engagement after observing customer pain at a booth. Three engineering deep-dives: AI image pipeline, prompt-engineering harness, and Klaviyo personalization architecture.",
 };
 
 export default function KioskDetailPage() {
@@ -51,13 +51,13 @@ export default function KioskDetailPage() {
           <ScrollReveal>
             <SectionHeader
               tag="Engineering Case Studies"
-              title="Two deep-dives into the AI surface"
-              subtitle="The kiosk is an AI feature wrapped in a UI — these are the parts worth showing. Each case study is a focused walkthrough — architecture, the engineering 'why,' and real annotated source. Each is independently linkable, so you can share the one that matches the role."
+              title="Three engineering deep-dives"
+              subtitle="Two on the AI kiosk surface (image pipeline + prompt-engineering harness), one on the Shopify side of the engagement (Klaviyo personalization architecture — dwell-time JS, customer-tag taxonomy, 6-path Django conditional logic). Each is a focused walkthrough — architecture, the engineering 'why,' and real annotated source. Independently linkable, so share the one that matches the role."
             />
           </ScrollReveal>
           <ScrollReveal>
             <CaseStudyTiles
-              basePath="/work/kiosk"
+              basePath="/work/shopify"
               order={kioskCaseStudyOrder}
               studies={kioskCaseStudies}
             />

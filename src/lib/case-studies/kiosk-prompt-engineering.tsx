@@ -60,7 +60,7 @@ export const kioskPromptEngineering: CaseStudy = {
     {
       number: 3,
       title: "Reusable constants — improvements propagate",
-      body: "SCENE_STYLE locks aesthetic across all 8 (\"professional custom automotive airbrush illustration… not photographic, not cartoon, not anime\"). IDENTITY_PRESERVATION lists what must survive (faces, hairstyles, decals, body proportions). NEGATIVE_TAIL is the negative-prompt guardrail.",
+      body: "SCENE_STYLE locks aesthetic across all 8 (\"professional airbrush-style illustration… not photographic, not cartoon, not anime\"). IDENTITY_PRESERVATION lists what must survive (faces, hairstyles, markings, body proportions). NEGATIVE_TAIL is the negative-prompt guardrail.",
       ref: "snippet 02",
     },
     {
@@ -78,7 +78,7 @@ export const kioskPromptEngineering: CaseStudy = {
     {
       number: 6,
       title: "\"Intended use\" sentence in the negative-prompt tail",
-      body: "Every approach ends with: \"…intended use: a custom automotive LED light bar insert — high-impact 51.4-inch panoramic display.\" Surprisingly nudges the model toward more dramatic, display-aware compositions. Cheap to include, measurable lift across all 8.",
+      body: "Every approach ends with: \"…intended use: a custom printed display product — high-impact ultra-wide panoramic display.\" Surprisingly nudges the model toward more dramatic, display-aware compositions. Cheap to include, measurable lift across all 8.",
       ref: "snippet 02",
     },
   ],
@@ -147,7 +147,7 @@ export const kioskPromptEngineering: CaseStudy = {
 
       <DiagramArrow />
 
-      <DiagramBox label="POST /api/generate-insert" tone="green">
+      <DiagramBox label="POST /api/generate-image" tone="green">
         gpt-image-1.5 → variance scoring → smart crop
       </DiagramBox>
     </Diagram>
@@ -156,17 +156,17 @@ export const kioskPromptEngineering: CaseStudy = {
     tag: "The Code · how it flows",
     heading: "Three snippets, in execution order",
     intro:
-      "Real excerpts from `app/api/generate-insert/route.ts` (the 8 approaches), `lib/promptConstants.ts` (the reusable constants), and `app/api/expand-prompt/route.ts` (the word-preservation expansion). Reading order: catalog the strategies → see the shared building blocks → see the rule that protects user intent.",
+      "Real excerpts from `app/api/generate-image/route.ts` (the 8 approaches), `lib/promptConstants.ts` (the reusable constants), and `app/api/expand-prompt/route.ts` (the word-preservation expansion). Reading order: catalog the strategies → see the shared building blocks → see the rule that protects user intent.",
   },
   snippets: [
     {
-      filename: "app/api/generate-insert/route.ts · APPROACHES[1..8]",
+      filename: "app/api/generate-image/route.ts · APPROACHES[1..8]",
       lang: "ts",
       stepLabel: "Step 1 · The catalog",
       stepHeading: "Eight strategies under one switchable parameter",
       stepBlurb:
         "Each approach is a function that composes the four shared blocks (SCENE_STYLE, IDENTITY_PRESERVATION, approach-specific composition, NEGATIVE_TAIL) into a single image-model prompt. A `?promptApproach=N` URL parameter selects which one runs. Approach 8 — the production winner — stacks three independent biases in one prompt; that's the source of its lift over single-technique approaches.",
-      code: `// app/api/generate-insert/route.ts
+      code: `// app/api/generate-image/route.ts
 import { SCENE_STYLE, IDENTITY_PRESERVATION, NEGATIVE_TAIL } from "@/lib/promptConstants";
 
 type ApproachId = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
@@ -243,26 +243,26 @@ export function buildPrompt(
 /**
  * Aesthetic lock — the same across all 8 approaches. Prevents the model
  * from drifting into photographic realism, cartoon, or digital painting
- * styles that don't match the airbrushed automotive product.
+ * styles that don't match the airbrush-style printed product.
  */
 export const SCENE_STYLE = \`
-Professional custom automotive airbrush illustration. Vibrant high-saturation colors,
+Professional airbrush-style illustration. Vibrant high-saturation colors,
 visible brush technique, soft glow on highlights, subtle gradient backgrounds.
 NOT photographic realism. NOT cartoon. NOT anime. NOT digital painting. NOT 3D render.
-Render style: hand-painted automotive mural with airbrushed depth.
+Render style: hand-painted panoramic mural with airbrushed depth.
 \`.trim();
 
 /**
  * Explicit list of what MUST survive into the generated image. Without this,
- * the model "improves" subjects by reshaping faces, dropping decals, or
- * changing brand markings — all of which break the use case (a customer's
- * own vehicle on their own light bar).
+ * the model "improves" subjects by reshaping faces, dropping markings, or
+ * changing brand identifiers — all of which break the use case (a customer's
+ * own scene printed onto their own hardware).
  */
 export const IDENTITY_PRESERVATION = \`
 Preserve all of the following from the reference photo intact:
 faces, hairstyles, fur and markings on pets, clothing, accessories,
-body proportions, poses, expressions, vehicle make and model,
-visible logos and brand marks, decals, text, paint colors and finishes.
+body proportions, poses, expressions, subject identity,
+visible logos and brand marks, stickers, text, colors and finishes.
 Cast realistic shadows consistent with the scene's lighting direction.
 \`.trim();
 
@@ -274,8 +274,8 @@ Cast realistic shadows consistent with the scene's lighting direction.
 export const NEGATIVE_TAIL = \`
 Do not add any text, words, watermarks, borders, logos, or signatures.
 No frames, no captions, no UI overlays.
-Intended use: a custom automotive LED light bar insert —
-high-impact 51.4-inch panoramic display.
+Intended use: a custom printed display product —
+high-impact ultra-wide panoramic display.
 \`.trim();`,
     },
     {
@@ -382,5 +382,5 @@ function extractSignificant(input: string): string[] {
     },
   ],
   sourceFooter:
-    "Excerpts from `app/api/generate-insert/route.ts`, `lib/promptConstants.ts`, and `app/api/expand-prompt/route.ts` in the kiosk configurator. The full setup also includes a kiosk admin route (`app/design/steps/StepGenerateTest.tsx`) that runs all 8 approaches × 3 variants = 24 images side-by-side for live A/B comparison — that's how Approach 8 was selected from real data, not a guess. Pairs with the AI Pipeline case study (variance scoring, 7-level fallback, opentype.js text burn-in). Happy to walk through the harness on a call.",
+    "Excerpts from `app/api/generate-image/route.ts`, `lib/promptConstants.ts`, and `app/api/expand-prompt/route.ts` in the kiosk configurator. The full setup also includes a kiosk admin route (`app/design/steps/StepGenerateTest.tsx`) that runs all 8 approaches × 3 variants = 24 images side-by-side for live A/B comparison — that's how Approach 8 was selected from real data, not a guess. Pairs with the AI Pipeline case study (variance scoring, 7-level fallback, opentype.js text burn-in). Happy to walk through the harness on a call.",
 };

@@ -17,7 +17,7 @@ export const kioskAiPipeline: CaseStudy = {
   oneLiner:
     "Customer photo + scene description → print-ready 15,420 × 1,320 px panoramic in ~45s, with a 7-level graceful-degradation chain so the booth never tells a paying customer \"generation failed.\"",
   lede:
-    "A four-model AI pipeline (OpenAI gpt-image-1.5, gpt-4o-mini, Claid 4× neural upscale, Replicate isnet-general-use rembg) that turns a customer photo and a one-line scene prompt into a print-ready 51.4-inch automotive light-bar insert. The interesting parts aren't the model calls — they're the engineering around them: a parallel-kickoff routing decision, per-row greyscale variance scoring to rank candidates, a subject-aware smart crop, and a 7-level fallback chain so a transient API failure never breaks the booth.",
+    "A four-model AI pipeline (OpenAI gpt-image-1.5, gpt-4o-mini, Claid 4× neural upscale, Replicate isnet-general-use rembg) that turns a customer photo and a one-line scene prompt into a print-ready ultra-wide panoramic display product. The interesting parts aren't the model calls — they're the engineering around them: a parallel-kickoff routing decision, per-row greyscale variance scoring to rank candidates, a subject-aware smart crop, and a 7-level fallback chain so a transient API failure never breaks the booth.",
   pullQuote:
     "Stock image models trained on 1:1 / 16:9 data don't have a useful prior for an 11.68:1 aspect. The prompt has to do composition work the model wasn't trained to do. Everything downstream — variance scoring, smart crop, fallback routing — exists because that prompt sometimes loses anyway.",
   prelaunchNote:
@@ -49,7 +49,7 @@ export const kioskAiPipeline: CaseStudy = {
     {
       number: 2,
       title: "Variance scoring instead of \"first response wins\"",
-      body: "Each candidate is converted to a 512-px greyscale proxy, per-row variance computed, and ONLY the variance inside the 12% strip that survives the final crop counts. Variance not brightness, not edge count — sky and ground are smooth (low variance), faces / hair / vehicle detail are rough (high variance), so the metric naturally targets usable detail in the surviving band.",
+      body: "Each candidate is converted to a 512-px greyscale proxy, per-row variance computed, and ONLY the variance inside the 12% strip that survives the final crop counts. Variance not brightness, not edge count — sky and ground are smooth (low variance), faces / hair / subject detail are rough (high variance), so the metric naturally targets usable detail in the surviving band.",
       ref: "snippet 02",
     },
     {
@@ -167,17 +167,17 @@ export const kioskAiPipeline: CaseStudy = {
     tag: "The Code · how it flows",
     heading: "Three snippets, in execution order",
     intro:
-      "Real excerpts from `app/api/generate-insert/route.ts`, `lib/imageUtils.ts`, and `lib/textComposite.ts`. Reading order matches request flow: parallel-kickoff + routing → variance-scoring + smart crop → opentype.js text burn-in.",
+      "Real excerpts from `app/api/generate-image/route.ts`, `lib/imageUtils.ts`, and `lib/textComposite.ts`. Reading order matches request flow: parallel-kickoff + routing → variance-scoring + smart crop → opentype.js text burn-in.",
   },
   snippets: [
     {
-      filename: "app/api/generate-insert/route.ts · pipeline + routing",
+      filename: "app/api/generate-image/route.ts · pipeline + routing",
       lang: "ts",
       stepLabel: "Step 1 · The orchestrator",
       stepHeading: "Parallel kickoff, then route by what came back",
       stepBlurb:
         "Both image calls fire concurrently — if /edits fails, the scene-only generation is already underway. The routing decision then picks one of seven paths based on which calls succeeded and whether the subject fits the crop window. The diagnostics object travels with the response so I can see exactly which path fired in prod logs.",
-      code: `// app/api/generate-insert/route.ts
+      code: `// app/api/generate-image/route.ts
 export const maxDuration = 60; // Vercel Pro function ceiling
 
 type Diagnostics = {
@@ -281,7 +281,7 @@ export async function POST(req: Request) {
       stepLabel: "Step 2 · The scoring + crop algorithm",
       stepHeading: "Per-row greyscale variance over the surviving crop band",
       stepBlurb:
-        "Convert the candidate to a 512-px greyscale proxy, compute per-row variance using the standard ∑x²/n − x̄² identity, and only count variance INSIDE the 12% strip that survives the final crop. The metric choice is the actual insight: sky and ground are smooth (low variance), faces / hair / vehicle detail are rough (high variance), so variance naturally targets usable detail in the surviving band — better than the obvious \"average brightness\" or \"edge count.\" Same pass detects the subject band (rows > 1.5× median variance) and yields a variance-weighted center for the crop. If the subject is taller than the window, top-bias with 12% headroom — preserve faces, sacrifice feet.",
+        "Convert the candidate to a 512-px greyscale proxy, compute per-row variance using the standard ∑x²/n − x̄² identity, and only count variance INSIDE the 12% strip that survives the final crop. The metric choice is the actual insight: sky and ground are smooth (low variance), faces / hair / subject detail are rough (high variance), so variance naturally targets usable detail in the surviving band — better than the obvious \"average brightness\" or \"edge count.\" Same pass detects the subject band (rows > 1.5× median variance) and yields a variance-weighted center for the crop. If the subject is taller than the window, top-bias with 12% headroom — preserve faces, sacrifice feet.",
       code: `// lib/imageUtils.ts
 import sharp from "sharp";
 
@@ -477,7 +477,7 @@ export async function burnInText(
     },
   ],
   sourceFooter:
-    "Excerpts from `app/api/generate-insert/route.ts`, `lib/imageUtils.ts`, and `lib/textComposite.ts` in the kiosk configurator. The full pipeline includes magic-byte MIME detection (caught a P0 where /v1/images/edits silently rejected JPEGs), 8 switchable prompt strategies (covered separately in the Prompt Engineering case study), and a regenerate-up-to-3-times refinement loop in the kiosk UI. " +
+    "Excerpts from `app/api/generate-image/route.ts`, `lib/imageUtils.ts`, and `lib/textComposite.ts` in the kiosk configurator. The full pipeline includes magic-byte MIME detection (caught a P0 where /v1/images/edits silently rejected JPEGs), 8 switchable prompt strategies (covered separately in the Prompt Engineering case study), and a regenerate-up-to-3-times refinement loop in the kiosk UI. " +
     "Engineering judgment / things removed: prototyped and abandoned an iterative outpainting panorama-stitcher (~220 lines, kept commented in `lib/outpaint.ts` as a record) — added 30–40s, seams unreliable; replaced with single-gen + 4× upscale + smart crop. " +
     "Production fires fixed: read-only Vercel filesystem killed `fs.writeFileSync` logger → migrated to a Neon Postgres `orderLogs` table; canvas taint blocked `getImageData()` on Vercel Blob URLs → added `crossOrigin=\"anonymous\"` everywhere images feed a canvas; OOM during smart-crop on the 15,420 × 10,281 intermediate → combined extract + resize into a single sharp call. " +
     "Cost engineering: reference photo downsized to 1024 px pre-upload, 3-candidate generation collapsed to 1 + variance scoring, upscale-before-crop drops the final stretch from 10× to 2.5× — net ~3× OpenAI spend reduction at parity quality. Happy to walk through the full pipeline on a call.",

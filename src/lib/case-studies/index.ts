@@ -4,9 +4,9 @@
 // folder, so private source can't accidentally leak into a deploy.
 //
 // Two project sets are wired today: MONISCOPE (5 deep dives) and the
-// off-roading e-commerce kiosk engagement (2 deep dives — client name
-// withheld under standard confidentiality). The shape is the same; the
-// per-project export below keeps lookups type-safe.
+// off-roading e-commerce engagement (3 deep dives — client name withheld
+// under standard confidentiality). The shape is the same; the per-project
+// export below keeps lookups type-safe.
 
 import type { ReactNode } from "react";
 import { aiAssistant } from "./moniscope-ai-assistant";
@@ -16,6 +16,7 @@ import { events } from "./moniscope-events";
 import { reporting } from "./moniscope-reporting";
 import { kioskAiPipeline } from "./kiosk-ai-pipeline";
 import { kioskPromptEngineering } from "./kiosk-prompt-engineering";
+import { kioskShopifyPersonalization } from "./kiosk-shopify-personalization";
 
 export type CodeSnippet = {
   filename: string;
@@ -123,6 +124,7 @@ export function getAdjacentCaseStudies(slug: MoniscopeCaseStudySlug): {
 export const kioskCaseStudyOrder = [
   "ai-pipeline",
   "prompt-engineering",
+  "personalization",
 ] as const;
 
 export type KioskCaseStudySlug = (typeof kioskCaseStudyOrder)[number];
@@ -130,6 +132,7 @@ export type KioskCaseStudySlug = (typeof kioskCaseStudyOrder)[number];
 export const kioskCaseStudies: Record<KioskCaseStudySlug, CaseStudy> = {
   "ai-pipeline": kioskAiPipeline,
   "prompt-engineering": kioskPromptEngineering,
+  personalization: kioskShopifyPersonalization,
 };
 
 export function getKioskCaseStudy(slug: string): CaseStudy | null {

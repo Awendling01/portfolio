@@ -5,13 +5,47 @@ import ScrollReveal from "@/components/ui/ScrollReveal";
 import ProjectCard from "@/components/projects/ProjectCard";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
-import { projects } from "@/lib/content";
+import { projects, type Project } from "@/lib/content";
 
 export const metadata: Metadata = {
   title: "Work",
   description:
-    "Full case studies of Andrew Wendling's recent engineering work — SaaS platforms, AI-powered kiosks, e-commerce consulting, ERP systems, and fintech.",
+    "Full case studies of recent engineering work — Shopify operations and integrations, multi-tenant SaaS, FinTech, and local SEO. Grouped by capability so platform-specific reviewers can scan to the section that matters.",
 };
+
+// Themed groups so a recruiter scanning for "Shopify experience" hits a
+// section header instead of mining 5 mixed project cards. Order matches
+// the CLAUDE.md positioning statement (Shopify integrations lead).
+const groups: { tag: string; title: string; slugs: string[] }[] = [
+  {
+    tag: "Shopify & E-Commerce",
+    title: "Shopify operations + integrations at scale",
+    slugs: ["offroad-kiosk", "futureshirts-erp"],
+  },
+  {
+    tag: "Multi-Tenant SaaS",
+    title: "Founder + sole engineer",
+    slugs: ["moniscope"],
+  },
+  {
+    tag: "Local SEO + Analytics",
+    title: "Concurrent consulting",
+    slugs: ["local-service-seo"],
+  },
+  {
+    tag: "FinTech",
+    title: "Cross-platform banking",
+    slugs: ["trabian-mvb-fintech"],
+  },
+];
+
+function detailHref(slug: string): string | undefined {
+  if (slug === "moniscope") return "/work/moniscope";
+  if (slug === "offroad-kiosk") return "/work/shopify";
+  return undefined;
+}
+
+const bySlug = new Map<string, Project>(projects.map((p) => [p.slug, p]));
 
 export default function WorkPage() {
   return (
@@ -21,32 +55,38 @@ export default function WorkPage() {
           <SectionHeader
             tag="Case Studies"
             title="Selected work, with the boring parts left in"
-            subtitle="Five projects across SaaS, contract, and full-time roles. What I built, what shipped, what mattered to the business."
+            subtitle="Grouped by capability — Shopify operations and integrations, multi-tenant SaaS, FinTech, and local SEO — so platform-specific reviewers can scan to the section that matters."
           />
         </Container>
       </section>
-      <section className="py-10 sm:py-12">
-        <Container>
-          <div className="space-y-6">
-            {projects.map((p, i) => (
-              <section key={p.slug} id={p.slug}>
-                <ScrollReveal delay={i * 60}>
-                  <ProjectCard
-                    project={p}
-                    detailHref={
-                      p.slug === "moniscope"
-                        ? "/work/moniscope"
-                        : p.slug === "offroad-kiosk"
-                          ? "/work/kiosk"
-                          : undefined
-                    }
-                  />
-                </ScrollReveal>
-              </section>
-            ))}
-          </div>
-        </Container>
-      </section>
+
+      {groups.map((group) => (
+        <section key={group.tag} className="py-10 sm:py-12">
+          <Container>
+            <ScrollReveal>
+              <SectionHeader tag={group.tag} title={group.title} />
+            </ScrollReveal>
+            <div className="space-y-6 mt-8">
+              {group.slugs.map((slug, i) => {
+                const project = bySlug.get(slug);
+                if (!project) return null;
+                return (
+                  <section key={slug} id={slug}>
+                    <ScrollReveal delay={i * 60}>
+                      <ProjectCard
+                        project={project}
+                        density="wide"
+                        detailHref={detailHref(slug)}
+                      />
+                    </ScrollReveal>
+                  </section>
+                );
+              })}
+            </div>
+          </Container>
+        </section>
+      ))}
+
       <section className="py-20">
         <Container>
           <Card

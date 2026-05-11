@@ -214,14 +214,14 @@ export default function AboutPage() {
                   </Link>
                   <span className="text-[var(--text)]">·</span>
                   <Link
-                    href="/work/kiosk/ai-pipeline"
+                    href="/work/shopify/ai-pipeline"
                     className="text-[var(--accent2)] hover:underline"
                   >
                     Kiosk pipeline →
                   </Link>
                   <span className="text-[var(--text)]">·</span>
                   <Link
-                    href="/work/kiosk/prompt-engineering"
+                    href="/work/shopify/prompt-engineering"
                     className="text-[var(--accent2)] hover:underline"
                   >
                     Prompt engineering →

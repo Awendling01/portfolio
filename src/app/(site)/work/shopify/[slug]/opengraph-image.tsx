@@ -7,7 +7,7 @@ import {
 // Static-rendered at build time via generateStaticParams (one image per
 // case-study slug). Edge runtime conflicts with generateStaticParams in
 // Next 16 — nodejs is the right choice for prebuilt OG images.
-export const alt = "AI Trade-Show Kiosk engineering case study";
+export const alt = "Off-Roading E-Commerce engineering case study";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -23,10 +23,10 @@ export default async function CaseStudyOG({
   const { slug } = await params;
   const study = getKioskCaseStudy(slug);
   const number = study?.number ?? "00";
-  const title = study?.shortTitle ?? "AI Trade-Show Kiosk";
+  const title = study?.shortTitle ?? "Off-Roading E-Commerce";
   const oneLiner =
     study?.oneLiner ??
-    "Trade-show kiosk with a four-model AI image pipeline.";
+    "Multi-system Shopify engagement plus a customer-insight AI trade-show kiosk.";
 
   return new ImageResponse(
     (
@@ -71,7 +71,7 @@ export default async function CaseStudyOG({
               fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace",
             }}
           >
-            {`AI Trade-Show Kiosk · Case Study ${number}`}
+            {`Off-Roading E-Commerce · Case Study ${number}`}
           </div>
         </div>
 

@@ -43,12 +43,49 @@ type DropdownItem = {
   children?: DropdownChild[];
 };
 
-// Dropdown items shown under Work. MONISCOPE and the AI Trade-Show Kiosk are
-// the two projects with deep-dive case-study sub-pages today; both expand to
-// a mini-accordion of their case studies. The other entries are anchor links
-// to /work#slug — no expansion.
+// Dropdown items shown under Work. Grouped by capability — Shopify &
+// E-Commerce first (matches the CLAUDE.md positioning that lists Shopify
+// integrations first), then SaaS, then Local SEO, then FinTech.
+//
+// Three patterns coexist here:
+//   1. Deep-dive page WITH case-study sub-pages (MONISCOPE, Off-Roading
+//      Shopify) — `children` set; row renders with an expand chevron.
+//   2. Deep-dive page with NO sub-pages (FutureShirts) — `href` points
+//      at its own page but `children` is omitted; no expand chevron.
+//   3. No deep-dive page (Local SEO, Trabian) — `href` is an anchor
+//      to `/work#slug`.
 const workDropdown: DropdownItem[] = [
   { label: "All Work", href: "/work", note: null, accent: false },
+
+  // ── Shopify & E-Commerce ─────────────────────────────────────────
+  {
+    label: "Shopify (Off-Roading)",
+    href: "/work/shopify",
+    note: "Off-roading e-commerce client · 3 case studies",
+    accent: true,
+    children: [
+      {
+        label: "Klaviyo personalization architecture",
+        href: "/work/shopify/personalization",
+      },
+      {
+        label: "AI image pipeline (kiosk add-on)",
+        href: "/work/shopify/ai-pipeline",
+      },
+      {
+        label: "Prompt engineering harness (kiosk add-on)",
+        href: "/work/shopify/prompt-engineering",
+      },
+    ],
+  },
+  {
+    label: "FutureShirts (Shopify GraphQL @ scale)",
+    href: "/work/futureshirts",
+    note: "55+ artist storefronts · 3-year deep dive",
+    accent: true,
+  },
+
+  // ── Multi-Tenant SaaS ────────────────────────────────────────────
   {
     label: "MONISCOPE",
     href: "/work/moniscope",
@@ -62,32 +99,20 @@ const workDropdown: DropdownItem[] = [
       { label: "Reporting engine", href: "/work/moniscope/reporting" },
     ],
   },
-  {
-    label: "AI Trade-Show Kiosk",
-    href: "/work/kiosk",
-    note: "Off-roading e-commerce client · 2 case studies",
-    accent: true,
-    children: [
-      { label: "AI image pipeline", href: "/work/kiosk/ai-pipeline" },
-      { label: "Prompt engineering", href: "/work/kiosk/prompt-engineering" },
-    ],
-  },
+
+  // ── Local SEO + Analytics ────────────────────────────────────────
   {
     label: "Local Service SEO",
     href: "/work#local-service-seo",
     note: "Concurrent consulting engagement",
     accent: false,
   },
-  {
-    label: "FutureShirts ERP",
-    href: "/work#futureshirts-erp",
-    note: "200K+ shipments / yr",
-    accent: false,
-  },
+
+  // ── FinTech ──────────────────────────────────────────────────────
   {
     label: "Trabian / MVB Bank",
     href: "/work#trabian-mvb-fintech",
-    note: "Cross-platform banking",
+    note: "Cross-platform banking · React Native + GraphQL",
     accent: false,
   },
 ];
