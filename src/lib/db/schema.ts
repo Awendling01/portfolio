@@ -24,10 +24,14 @@ export const messages = pgTable(
     createdAt: timestamp("created_at", { withTimezone: true })
       .notNull()
       .defaultNow(),
+    readAt: timestamp("read_at", { withTimezone: true }),
+    respondedAt: timestamp("responded_at", { withTimezone: true }),
+    deletedAt: timestamp("deleted_at", { withTimezone: true }),
   },
   (t) => ({
     createdAtIdx: index("messages_created_at_idx").on(t.createdAt),
     ipHashIdx: index("messages_ip_hash_idx").on(t.ipHash),
+    deletedAtIdx: index("messages_deleted_at_idx").on(t.deletedAt),
   }),
 );
 
