@@ -225,6 +225,7 @@ export default function Home() {
                           ? "/work/futureshirts"
                           : undefined
                   }
+                  hideDeepDiveCTA={p.slug === "futureshirts-erp"}
                 />
               </ScrollReveal>
             ))}

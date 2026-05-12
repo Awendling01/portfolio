@@ -19,6 +19,13 @@ type Props = {
   density?: Density;
   /** When set, the whole card becomes a link to the project deep-dive page. */
   detailHref?: string;
+  /**
+   * Hide the "Read the deep dive →" call-to-action even when `detailHref`
+   * is set. Card stays clickable; the inline CTA just isn't rendered.
+   * Useful for projects where a deep-dive page exists but isn't worth
+   * advertising on the home grid.
+   */
+  hideDeepDiveCTA?: boolean;
 };
 
 export default function ProjectCard({
@@ -26,6 +33,7 @@ export default function ProjectCard({
   variant = "full",
   density = "default",
   detailHref,
+  hideDeepDiveCTA = false,
 }: Props) {
   const isCompact = variant === "compact";
   const showHighlights = !isCompact && project.highlights.length > 0;
@@ -107,7 +115,7 @@ export default function ProjectCard({
           <div className={techMinH}>
             <TechTags items={project.tech} />
           </div>
-          {detailHref && isGrid ? (
+          {detailHref && isGrid && !hideDeepDiveCTA ? (
             <div className="mt-4 flex items-center gap-2 mono text-[11px] uppercase tracking-[0.18em] text-[var(--accent)] group-hover:text-white transition-colors">
               Read the deep dive
               <span aria-hidden="true">→</span>
