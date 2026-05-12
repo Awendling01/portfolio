@@ -2,11 +2,10 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import BackLink from "@/components/ui/BackLink";
 import Container from "@/components/ui/Container";
+import CtaCard from "@/components/ui/CtaCard";
 import SectionHeader from "@/components/ui/SectionHeader";
 import ScrollReveal from "@/components/ui/ScrollReveal";
 import ProjectCard from "@/components/projects/ProjectCard";
-import Button from "@/components/ui/Button";
-import Card from "@/components/ui/Card";
 import CaseStudyTiles from "@/components/case-study/CaseStudyTiles";
 import {
   kioskCaseStudies,
@@ -58,23 +57,10 @@ export default function KioskDetailPage() {
 
       <section className="py-20">
         <Container>
-          <Card
-            padding="large"
-            hover={false}
-            className="flex flex-col sm:flex-row sm:items-center justify-between gap-6"
-          >
-            <div>
-              <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
-                Want to see the harness or the diagnostics object?
-              </h3>
-              <p className="mt-2 text-sm text-[var(--text)] max-w-xl">
-                Happy to walk through the 8-prompt comparison run, the
-                per-phase ms timings, or the full 7-level routing decision
-                on a call.
-              </p>
-            </div>
-            <Button href="/contact">Get In Touch</Button>
-          </Card>
+          <CtaCard
+            heading="Want to see the harness or the diagnostics object?"
+            body="Happy to walk through the 8-prompt comparison run, the per-phase ms timings, or the full 7-level routing decision on a call."
+          />
         </Container>
       </section>
     </>

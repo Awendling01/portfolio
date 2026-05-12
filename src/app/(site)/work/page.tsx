@@ -3,8 +3,7 @@ import Container from "@/components/ui/Container";
 import SectionHeader from "@/components/ui/SectionHeader";
 import ScrollReveal from "@/components/ui/ScrollReveal";
 import ProjectCard from "@/components/projects/ProjectCard";
-import Button from "@/components/ui/Button";
-import Card from "@/components/ui/Card";
+import CtaCard from "@/components/ui/CtaCard";
 import { projects, type Project } from "@/lib/content";
 
 export const metadata: Metadata = {
@@ -90,22 +89,10 @@ export default function WorkPage() {
 
       <section className="py-20">
         <Container>
-          <Card
-            padding="large"
-            hover={false}
-            className="flex flex-col sm:flex-row sm:items-center justify-between gap-6"
-          >
-            <div>
-              <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
-                Want a deeper walkthrough?
-              </h3>
-              <p className="mt-2 text-sm text-[var(--text)] max-w-xl">
-                Happy to share live demos, architecture diagrams, or specific
-                code. Just send me a note.
-              </p>
-            </div>
-            <Button href="/contact">Get In Touch</Button>
-          </Card>
+          <CtaCard
+            heading="Want a deeper walkthrough?"
+            body="Happy to share live demos, architecture diagrams, or specific code. Just send me a note."
+          />
         </Container>
       </section>
     </>

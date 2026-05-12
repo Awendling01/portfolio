@@ -2,11 +2,10 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import BackLink from "@/components/ui/BackLink";
 import Container from "@/components/ui/Container";
+import CtaCard from "@/components/ui/CtaCard";
 import SectionHeader from "@/components/ui/SectionHeader";
 import ScrollReveal from "@/components/ui/ScrollReveal";
 import ProjectCard from "@/components/projects/ProjectCard";
-import Button from "@/components/ui/Button";
-import Card from "@/components/ui/Card";
 import CaseStudyTiles from "@/components/case-study/CaseStudyTiles";
 import {
   moniscopeCaseStudies,
@@ -58,22 +57,10 @@ export default function MoniscopeDetailPage() {
 
       <section className="py-20">
         <Container>
-          <Card
-            padding="large"
-            hover={false}
-            className="flex flex-col sm:flex-row sm:items-center justify-between gap-6"
-          >
-            <div>
-              <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
-                Want a guided walkthrough?
-              </h3>
-              <p className="mt-2 text-sm text-[var(--text)] max-w-xl">
-                Live demos, deeper architecture conversations, or specific
-                code on request. Always happy to talk through this stuff.
-              </p>
-            </div>
-            <Button href="/contact">Get In Touch</Button>
-          </Card>
+          <CtaCard
+            heading="Want a guided walkthrough?"
+            body="Live demos, deeper architecture conversations, or specific code on request. Always happy to talk through this stuff."
+          />
         </Container>
       </section>
     </>
