@@ -10,7 +10,8 @@ import {
   getTopReferrers,
   ANALYTICS_WINDOW_DAYS,
 } from "@/lib/analytics-queries";
-import { DailyBarChart, Donut, RankedBars } from "@/components/admin/Charts";
+import { DailyBarChart, Donut } from "@/components/admin/Charts";
+import RankedSection from "@/components/admin/RankedSection";
 import Stat from "@/components/admin/Stat";
 import NotConfigured from "@/components/admin/NotConfigured";
 import { formatDuration, formatPct, countryName } from "@/lib/format";
@@ -22,6 +23,9 @@ const SEARCH_CONSOLE_URL =
 
 export const dynamic = "force-dynamic";
 
+// Card chrome used by the Donut section and the GSC link card below.
+// The 5 RankedBars sections render through RankedSection which has its
+// own copy of this className.
 const card =
   "rounded-2xl border border-[var(--border)] bg-[var(--surface)]/80 p-6";
 
@@ -114,46 +118,34 @@ export default async function AnalyticsPage() {
       </section>
 
       <div className="grid gap-6 md:grid-cols-2">
-        <section className={card}>
-          <h2 className="mono text-[11px] uppercase tracking-[0.2em] text-[var(--text)] mb-4">
-            Top pages
-          </h2>
-          <RankedBars
-            rows={pages.map((p) => ({
-              label: p.page,
-              value: p.pageviews,
-              sub:
-                p.avgDwellMs > 1000
-                  ? `${formatDuration(p.avgDwellMs)} avg`
-                  : undefined,
-            }))}
-            formatValue={(n) => `${n}`}
-          />
-        </section>
+        <RankedSection
+          title="Top pages"
+          rows={pages.map((p) => ({
+            label: p.page,
+            value: p.pageviews,
+            sub:
+              p.avgDwellMs > 1000
+                ? `${formatDuration(p.avgDwellMs)} avg`
+                : undefined,
+          }))}
+          formatValue={(n) => `${n}`}
+        />
 
-        <section className={card}>
-          <h2 className="mono text-[11px] uppercase tracking-[0.2em] text-[var(--text)] mb-4">
-            Top referrers
-          </h2>
-          <RankedBars
-            rows={referrers.map((r) => ({
-              label: r.host,
-              value: r.sessions,
-            }))}
-          />
-        </section>
+        <RankedSection
+          title="Top referrers"
+          rows={referrers.map((r) => ({
+            label: r.host,
+            value: r.sessions,
+          }))}
+        />
 
-        <section className={card}>
-          <h2 className="mono text-[11px] uppercase tracking-[0.2em] text-[var(--text)] mb-4">
-            Top countries
-          </h2>
-          <RankedBars
-            rows={countries.map((c) => ({
-              label: countryName(c.country),
-              value: c.sessions,
-            }))}
-          />
-        </section>
+        <RankedSection
+          title="Top countries"
+          rows={countries.map((c) => ({
+            label: countryName(c.country),
+            value: c.sessions,
+          }))}
+        />
 
         <section className={card}>
           <h2 className="mono text-[11px] uppercase tracking-[0.2em] text-[var(--text)] mb-4">
@@ -180,29 +172,21 @@ export default async function AnalyticsPage() {
           />
         </section>
 
-        <section className={card}>
-          <h2 className="mono text-[11px] uppercase tracking-[0.2em] text-[var(--text)] mb-4">
-            Browsers
-          </h2>
-          <RankedBars
-            rows={browsers.map((b) => ({
-              label: b.browser,
-              value: b.sessions,
-            }))}
-          />
-        </section>
+        <RankedSection
+          title="Browsers"
+          rows={browsers.map((b) => ({
+            label: b.browser,
+            value: b.sessions,
+          }))}
+        />
 
-        <section className={card}>
-          <h2 className="mono text-[11px] uppercase tracking-[0.2em] text-[var(--text)] mb-4">
-            Operating systems
-          </h2>
-          <RankedBars
-            rows={os.map((o) => ({
-              label: o.os,
-              value: o.sessions,
-            }))}
-          />
-        </section>
+        <RankedSection
+          title="Operating systems"
+          rows={os.map((o) => ({
+            label: o.os,
+            value: o.sessions,
+          }))}
+        />
       </div>
 
       {/* Google Search Console — external link, not embedded */}
