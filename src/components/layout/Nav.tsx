@@ -10,112 +10,12 @@ import {
   type MouseEvent as ReactMouseEvent,
 } from "react";
 import Container from "@/components/ui/Container";
-
-type NavLink = { href: string; label: string; hasDropdown?: boolean };
-
-const links: NavLink[] = [
-  { href: "/", label: "Home" },
-  { href: "/work", label: "Work", hasDropdown: true },
-  { href: "/about", label: "About" },
-  { href: "/uses", label: "Uses" },
-  { href: "/contact", label: "Contact" },
-];
-
-// Admin tabs — rendered in a separate "right block" of the nav only when
-// the visitor is signed in. Auth state arrives as the `isAuthed` prop from
-// the (site) layout, which reads the cookie server-side.
-const adminLinks: NavLink[] = [
-  { href: "/admin", label: "Overview" },
-  { href: "/admin/analytics", label: "Analytics" },
-  { href: "/admin/visitors", label: "Visitors" },
-  { href: "/admin/messages", label: "Messages" },
-  { href: "/admin/security", label: "Security" },
-];
-
-type DropdownChild = { label: string; href: string };
-
-type DropdownItem = {
-  label: string;
-  href: string;
-  note: string | null;
-  accent: boolean;
-  /** Optional case-study list — renders as a mini-accordion under the parent. */
-  children?: DropdownChild[];
-};
-
-// Dropdown items shown under Work. Grouped by capability — Shopify &
-// E-Commerce first (matches the CLAUDE.md positioning that lists Shopify
-// integrations first), then SaaS, then Local SEO, then FinTech.
-//
-// Three patterns coexist here:
-//   1. Deep-dive page WITH case-study sub-pages (MONISCOPE, Off-Roading
-//      Shopify) — `children` set; row renders with an expand chevron.
-//   2. Deep-dive page with NO sub-pages (FutureShirts) — `href` points
-//      at its own page but `children` is omitted; no expand chevron.
-//   3. No deep-dive page (Local SEO, Trabian) — `href` is an anchor
-//      to `/work#slug`.
-const workDropdown: DropdownItem[] = [
-  { label: "All Work", href: "/work", note: null, accent: false },
-
-  // ── Shopify & E-Commerce ─────────────────────────────────────────
-  {
-    label: "Shopify (Off-Roading)",
-    href: "/work/shopify",
-    note: "Off-roading e-commerce client · 3 case studies",
-    accent: true,
-    children: [
-      {
-        label: "Klaviyo personalization architecture",
-        href: "/work/shopify/personalization",
-      },
-      {
-        label: "AI image pipeline (kiosk add-on)",
-        href: "/work/shopify/ai-pipeline",
-      },
-      {
-        label: "Prompt engineering harness (kiosk add-on)",
-        href: "/work/shopify/prompt-engineering",
-      },
-    ],
-  },
-  {
-    label: "FutureShirts (Shopify GraphQL @ scale)",
-    href: "/work/futureshirts",
-    note: "55+ artist storefronts · 3-year deep dive",
-    accent: true,
-  },
-
-  // ── Multi-Tenant SaaS ────────────────────────────────────────────
-  {
-    label: "MONISCOPE",
-    href: "/work/moniscope",
-    note: "Multi-tenant SaaS · 5 case studies",
-    accent: true,
-    children: [
-      { label: "AI assistant", href: "/work/moniscope/ai-assistant" },
-      { label: "Multi-processor payments", href: "/work/moniscope/payments" },
-      { label: "Automation engine", href: "/work/moniscope/automation" },
-      { label: "Event-driven architecture", href: "/work/moniscope/events" },
-      { label: "Reporting engine", href: "/work/moniscope/reporting" },
-    ],
-  },
-
-  // ── Local SEO + Analytics ────────────────────────────────────────
-  {
-    label: "Local Service SEO",
-    href: "/work#local-service-seo",
-    note: "Concurrent consulting engagement",
-    accent: false,
-  },
-
-  // ── FinTech ──────────────────────────────────────────────────────
-  {
-    label: "Trabian / MVB Bank",
-    href: "/work#trabian-mvb-fintech",
-    note: "Cross-platform banking · React Native + GraphQL",
-    accent: false,
-  },
-];
+import ChevronIcon from "./nav/ChevronIcon";
+import WorkDropdownDesktop from "./nav/WorkDropdownDesktop";
+import AdminDropdownDesktop from "./nav/AdminDropdownDesktop";
+import MobileMenuBody from "./nav/MobileMenuBody";
+import { adminLinks, links, workDropdown } from "./nav/items";
+import type { DropdownItem } from "./nav/types";
 
 type Props = { isAuthed?: boolean };
 
@@ -391,124 +291,16 @@ export default function Nav({ isAuthed = false }: Props) {
                     }`}
                   >
                     {l.label}
-                    <svg
-                      width="10"
-                      height="10"
-                      viewBox="0 0 12 12"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="1.6"
-                      className={`transition-transform ${
-                        workOpen ? "rotate-180" : ""
-                      }`}
-                      aria-hidden="true"
-                    >
-                      <path
-                        d="M2 4.5l4 4 4-4"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
+                    <ChevronIcon expanded={workOpen} />
                   </button>
                   {workOpen ? (
-                    <div
-                      role="menu"
-                      onKeyDown={handleMenuKeyDown}
-                      className="absolute top-full left-0 mt-1.5 w-80 rounded-xl border border-[var(--border)] bg-[var(--bg)]/95 backdrop-blur-md shadow-[0_24px_48px_-12px_rgba(0,0,0,0.5)] py-1.5"
-                    >
-                      {workDropdown.map((item) => {
-                        const itemActive = dropdownItemActive(item.href);
-                        const expanded = isExpanded(item);
-                        const hasKids = !!item.children?.length;
-                        return (
-                          <div key={item.href}>
-                            <div
-                              className={`flex items-stretch mx-1.5 rounded-md transition-colors ${
-                                item.accent
-                                  ? "bg-[var(--accent)]/[0.06] hover:bg-[var(--accent)]/[0.12]"
-                                  : "hover:bg-[var(--surface)]"
-                              } ${itemActive && !hasKids ? "bg-[var(--surface)]" : ""}`}
-                            >
-                              <Link
-                                href={item.href}
-                                role="menuitem"
-                                aria-current={itemActive ? "page" : undefined}
-                                className="flex-1 px-3.5 py-2.5 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/60"
-                              >
-                                <div
-                                  className={`text-sm font-medium ${
-                                    item.accent
-                                      ? "text-[var(--accent)]"
-                                      : "text-white"
-                                  }`}
-                                >
-                                  {item.label}
-                                </div>
-                                {item.note ? (
-                                  <div className="mt-0.5 text-[12px] text-[var(--text)] leading-snug">
-                                    {item.note}
-                                  </div>
-                                ) : null}
-                              </Link>
-                              {hasKids ? (
-                                <button
-                                  type="button"
-                                  onClick={(e) => toggleExpanded(e, item.label)}
-                                  aria-label={`${expanded ? "Collapse" : "Expand"} ${item.label} case studies`}
-                                  aria-expanded={expanded}
-                                  className="shrink-0 self-center mr-1.5 inline-flex items-center justify-center w-7 h-7 rounded-md text-[var(--text)] hover:text-white hover:bg-[var(--surface2)]/70 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/60"
-                                >
-                                  <svg
-                                    width="11"
-                                    height="11"
-                                    viewBox="0 0 12 12"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    strokeWidth="1.8"
-                                    className={`transition-transform ${
-                                      expanded ? "rotate-180" : ""
-                                    }`}
-                                    aria-hidden="true"
-                                  >
-                                    <path
-                                      d="M2 4.5l4 4 4-4"
-                                      strokeLinecap="round"
-                                      strokeLinejoin="round"
-                                    />
-                                  </svg>
-                                </button>
-                              ) : null}
-                            </div>
-                            {hasKids && expanded ? (
-                              <div className="ml-5 mt-0.5 mb-1 border-l border-[var(--border)]/70 pl-1.5 flex flex-col">
-                                {item.children!.map((child) => {
-                                  const childActive = dropdownItemActive(
-                                    child.href,
-                                  );
-                                  return (
-                                    <Link
-                                      key={child.href}
-                                      href={child.href}
-                                      role="menuitem"
-                                      aria-current={
-                                        childActive ? "page" : undefined
-                                      }
-                                      className={`px-3 py-2 mr-1.5 rounded-md text-[13px] transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/60 ${
-                                        childActive
-                                          ? "text-white bg-[var(--surface)]"
-                                          : "text-[var(--text2)] hover:text-white hover:bg-[var(--surface)]"
-                                      }`}
-                                    >
-                                      {child.label}
-                                    </Link>
-                                  );
-                                })}
-                              </div>
-                            ) : null}
-                          </div>
-                        );
-                      })}
-                    </div>
+                    <WorkDropdownDesktop
+                      items={workDropdown}
+                      onMenuKeyDown={handleMenuKeyDown}
+                      dropdownItemActive={dropdownItemActive}
+                      isExpanded={isExpanded}
+                      toggleExpanded={toggleExpanded}
+                    />
                   ) : null}
                 </div>
               );
@@ -528,84 +320,17 @@ export default function Nav({ isAuthed = false }: Props) {
             );
           })}
           {isAuthed ? (
-            // Admin "right block" — appears only when signed in. Collapsed
-            // behind an "Admin ▾" trigger so the regular nav doesn't have
-            // to share visual weight with five permission-gated tabs.
-            // Mirrors the Work dropdown's keyboard + click-outside contract.
-            <div
-              ref={adminMenuRef}
-              className="ml-3 pl-3 border-l border-[var(--border)]/70 relative"
-            >
-              <button
-                ref={adminTriggerRef}
-                type="button"
-                onClick={() => setAdminOpen((v) => !v)}
-                onKeyDown={handleAdminTriggerKeyDown}
-                aria-haspopup="menu"
-                aria-expanded={adminOpen}
-                className={`inline-flex items-center gap-1 px-3 py-2 text-sm font-medium rounded-md transition-colors cursor-pointer ${
-                  pathname.startsWith("/admin")
-                    ? "text-white"
-                    : "text-[var(--text)] hover:text-white"
-                }`}
-              >
-                Admin
-                <svg
-                  width="10"
-                  height="10"
-                  viewBox="0 0 12 12"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.6"
-                  className={`transition-transform ${
-                    adminOpen ? "rotate-180" : ""
-                  }`}
-                  aria-hidden="true"
-                >
-                  <path
-                    d="M2 4.5l4 4 4-4"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </button>
-              {adminOpen ? (
-                <div
-                  role="menu"
-                  onKeyDown={handleAdminMenuKeyDown}
-                  className="absolute top-full right-0 mt-1.5 w-56 rounded-xl border border-[var(--border)] bg-[var(--bg)]/95 backdrop-blur-md shadow-[0_24px_48px_-12px_rgba(0,0,0,0.5)] py-1.5"
-                >
-                  {adminLinks.map((l) => {
-                    const active = isExactActive(l.href);
-                    return (
-                      <Link
-                        key={l.href}
-                        href={l.href}
-                        role="menuitem"
-                        aria-current={active ? "page" : undefined}
-                        className={`block px-3.5 py-2 mx-1.5 rounded-md text-[13px] transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/60 ${
-                          active
-                            ? "text-white bg-[var(--accent)]/[0.12]"
-                            : "text-[var(--text2)] hover:text-white hover:bg-[var(--surface)]"
-                        }`}
-                      >
-                        {l.label}
-                      </Link>
-                    );
-                  })}
-                  <div className="my-1 mx-3 border-t border-[var(--border)]/70" />
-                  <form action="/api/logout" method="POST" className="mx-1.5">
-                    <button
-                      type="submit"
-                      role="menuitem"
-                      className="block w-full text-left px-3.5 py-2 rounded-md text-[13px] text-[var(--text2)] hover:text-[var(--rose)] hover:bg-[var(--rose)]/[0.08] transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/60"
-                    >
-                      Logout
-                    </button>
-                  </form>
-                </div>
-              ) : null}
-            </div>
+            <AdminDropdownDesktop
+              adminLinks={adminLinks}
+              adminOpen={adminOpen}
+              setAdminOpen={setAdminOpen}
+              adminMenuRef={adminMenuRef}
+              adminTriggerRef={adminTriggerRef}
+              onMenuKeyDown={handleAdminMenuKeyDown}
+              onTriggerKeyDown={handleAdminTriggerKeyDown}
+              pathname={pathname}
+              isExactActive={isExactActive}
+            />
           ) : (
             <>
               <Link
@@ -654,215 +379,22 @@ export default function Nav({ isAuthed = false }: Props) {
       </Container>
 
       {open ? (
-        <div className="md:hidden border-t border-[var(--border)]/70 bg-[var(--bg)]/95 backdrop-blur-md">
-          <Container className="py-3 flex flex-col gap-1">
-            {links.map((l) => {
-              const active = isActive(l.href);
-              if (l.hasDropdown) {
-                return (
-                  <div key={l.href}>
-                    <button
-                      type="button"
-                      onClick={() => setMobileWorkOpen((v) => !v)}
-                      aria-expanded={mobileWorkOpen}
-                      className={`w-full flex items-center justify-between px-3 py-3 text-sm font-medium rounded-md cursor-pointer ${
-                        active
-                          ? "text-white bg-[var(--surface)]"
-                          : "text-[var(--text)]"
-                      }`}
-                    >
-                      <span>{l.label}</span>
-                      <svg
-                        width="11"
-                        height="11"
-                        viewBox="0 0 12 12"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="1.6"
-                        className={`transition-transform ${
-                          mobileWorkOpen ? "rotate-180" : ""
-                        }`}
-                        aria-hidden="true"
-                      >
-                        <path
-                          d="M2 4.5l4 4 4-4"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                    </button>
-                    {mobileWorkOpen ? (
-                      <div className="ml-3 mt-1 mb-2 border-l border-[var(--border)]/70 pl-3 flex flex-col gap-0.5">
-                        {workDropdown.map((item) => {
-                          const expanded = isExpanded(item);
-                          const hasKids = !!item.children?.length;
-                          return (
-                            <div key={item.href}>
-                              <div className="flex items-stretch">
-                                <Link
-                                  href={item.href}
-                                  onClick={closeMenu}
-                                  className={`flex-1 px-3 py-2.5 text-[13px] rounded-md ${
-                                    item.accent
-                                      ? "text-[var(--accent)]"
-                                      : "text-[var(--text2)]"
-                                  }`}
-                                >
-                                  {item.label}
-                                  {item.note ? (
-                                    <span className="block mt-0.5 text-[11px] text-[var(--text)]">
-                                      {item.note}
-                                    </span>
-                                  ) : null}
-                                </Link>
-                                {hasKids ? (
-                                  <button
-                                    type="button"
-                                    onClick={(e) =>
-                                      toggleExpanded(e, item.label)
-                                    }
-                                    aria-label={`${expanded ? "Collapse" : "Expand"} ${item.label} case studies`}
-                                    aria-expanded={expanded}
-                                    className="shrink-0 self-center inline-flex items-center justify-center w-9 h-9 rounded-md text-[var(--text)] hover:text-white cursor-pointer"
-                                  >
-                                    <svg
-                                      width="11"
-                                      height="11"
-                                      viewBox="0 0 12 12"
-                                      fill="none"
-                                      stroke="currentColor"
-                                      strokeWidth="1.8"
-                                      className={`transition-transform ${
-                                        expanded ? "rotate-180" : ""
-                                      }`}
-                                      aria-hidden="true"
-                                    >
-                                      <path
-                                        d="M2 4.5l4 4 4-4"
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                      />
-                                    </svg>
-                                  </button>
-                                ) : null}
-                              </div>
-                              {hasKids && expanded ? (
-                                <div className="ml-3 mt-0.5 mb-1.5 border-l border-[var(--border)]/70 pl-3 flex flex-col">
-                                  {item.children!.map((child) => (
-                                    <Link
-                                      key={child.href}
-                                      href={child.href}
-                                      onClick={closeMenu}
-                                      className="px-3 py-2 text-[12.5px] text-[var(--text2)] rounded-md hover:text-white"
-                                    >
-                                      {child.label}
-                                    </Link>
-                                  ))}
-                                </div>
-                              ) : null}
-                            </div>
-                          );
-                        })}
-                      </div>
-                    ) : null}
-                  </div>
-                );
-              }
-              return (
-                <Link
-                  key={l.href}
-                  href={l.href}
-                  onClick={closeMenu}
-                  className={`px-3 py-3 text-sm font-medium rounded-md ${
-                    active
-                      ? "text-white bg-[var(--surface)]"
-                      : "text-[var(--text)]"
-                  }`}
-                >
-                  {l.label}
-                </Link>
-              );
-            })}
-            {isAuthed ? (
-              // Mobile admin accordion — collapsed by default, expands to
-              // reveal the 5 admin links + Logout. Mirrors the Work
-              // accordion in the same hamburger menu for consistency.
-              <div className="border-t border-[var(--border)]/50 mt-1 pt-3">
-                <button
-                  type="button"
-                  onClick={() => setMobileAdminOpen((v) => !v)}
-                  aria-expanded={mobileAdminOpen}
-                  className={`w-full flex items-center justify-between px-3 py-3 text-sm font-medium rounded-md cursor-pointer ${
-                    pathname.startsWith("/admin")
-                      ? "text-white bg-[var(--surface)]"
-                      : "text-[var(--text)]"
-                  }`}
-                >
-                  <span>Admin</span>
-                  <svg
-                    width="11"
-                    height="11"
-                    viewBox="0 0 12 12"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.6"
-                    className={`transition-transform ${
-                      mobileAdminOpen ? "rotate-180" : ""
-                    }`}
-                    aria-hidden="true"
-                  >
-                    <path
-                      d="M2 4.5l4 4 4-4"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </button>
-                {mobileAdminOpen ? (
-                  <div className="ml-3 mt-1 mb-2 border-l border-[var(--border)]/70 pl-3 flex flex-col gap-0.5">
-                    {adminLinks.map((l) => {
-                      const active = isExactActive(l.href);
-                      return (
-                        <Link
-                          key={l.href}
-                          href={l.href}
-                          onClick={closeMenu}
-                          className={`px-3 py-2.5 text-[13.5px] rounded-md ${
-                            active
-                              ? "text-white bg-[var(--accent)]/[0.12]"
-                              : "text-[var(--text2)]"
-                          }`}
-                        >
-                          {l.label}
-                        </Link>
-                      );
-                    })}
-                    <form
-                      action="/api/logout"
-                      method="POST"
-                      className="px-3 mt-1"
-                    >
-                      <button
-                        type="submit"
-                        className="text-[13.5px] text-[var(--text2)] hover:text-[var(--rose)] cursor-pointer"
-                      >
-                        Logout →
-                      </button>
-                    </form>
-                  </div>
-                ) : null}
-              </div>
-            ) : (
-              <Link
-                href="/login"
-                onClick={closeMenu}
-                className="px-3 py-3 text-sm font-medium rounded-md text-[var(--text)] border-t border-[var(--border)]/50 mt-1 pt-3"
-              >
-                Login
-              </Link>
-            )}
-          </Container>
-        </div>
+        <MobileMenuBody
+          links={links}
+          adminLinks={adminLinks}
+          workDropdown={workDropdown}
+          mobileWorkOpen={mobileWorkOpen}
+          setMobileWorkOpen={setMobileWorkOpen}
+          mobileAdminOpen={mobileAdminOpen}
+          setMobileAdminOpen={setMobileAdminOpen}
+          isAuthed={isAuthed}
+          isActive={isActive}
+          isExactActive={isExactActive}
+          isExpanded={isExpanded}
+          toggleExpanded={toggleExpanded}
+          closeMenu={closeMenu}
+          pathname={pathname}
+        />
       ) : null}
     </header>
   );
