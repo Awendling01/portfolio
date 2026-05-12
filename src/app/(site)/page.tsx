@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { Suspense } from "react";
 import Container from "@/components/ui/Container";
 import Button from "@/components/ui/Button";
 import StatBar from "@/components/ui/StatBar";
@@ -10,7 +9,6 @@ import StatusChip from "@/components/ui/StatusChip";
 import TwoCareers from "@/components/sections/TwoCareers";
 import WhatIBring from "@/components/sections/WhatIBring";
 import Testimonials from "@/components/sections/Testimonials";
-import GitHubRepos from "@/components/integrations/GitHubRepos";
 import { projects, heroStats, contact } from "@/lib/content";
 
 const featured = projects.filter((p) => p.featured);

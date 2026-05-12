@@ -359,7 +359,8 @@ export const uses: UsesGroup[] = [
     items: [
       { name: "VS Code", note: "primary editor" },
       { name: "Jupyter", note: "Python notebooks" },
-      { name: "Bitbucket", note: "Atlassian repo host" },
+      { name: "GitHub", note: "primary repo host + Actions" },
+      { name: "Bitbucket", note: "client repos (Atlassian shop)" },
       { name: "Claude Code (CLI)", note: "AI pair programmer + agent harness" },
       { name: "Copilot (CLI)", note: "GitHub AI in shell" },
       { name: "ChatGPT (CLI)", note: "OpenAI assistant in shell" },

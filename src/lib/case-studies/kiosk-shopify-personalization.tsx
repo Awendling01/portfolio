@@ -120,7 +120,7 @@ export const kioskShopifyPersonalization: CaseStudy = {
           dwell time (only if higher than previous visit this session).
         </DiagramStep>
         <DiagramStep>
-          Pick the session's <span className="text-white font-semibold">highest-dwell product</span>{" "}
+          Pick the session&apos;s <span className="text-white font-semibold">highest-dwell product</span>{" "}
           and push it via{" "}
           <DiagramCode>{`_learnq.push(['identify', { Top_Browsed_Product, ... }])`}</DiagramCode>
         </DiagramStep>
