@@ -89,10 +89,10 @@ export default function AboutPage() {
                     serving + AVIF/WebP optimization automatically. */}
                 <div className="overflow-hidden rounded-lg border border-[var(--border)]/70">
                   <Image
-                    src="/headshot.png"
+                    src="/headshot.jpg"
                     alt="Andrew Wendling"
-                    width={1023}
-                    height={1537}
+                    width={798}
+                    height={1200}
                     priority
                     sizes="(max-width: 768px) 90vw, 280px"
                     className="w-full h-auto"

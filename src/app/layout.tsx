@@ -107,7 +107,7 @@ export default async function RootLayout({
               "@type": "Person",
               name: "Andrew Wendling",
               url: "https://andrewwendling.info",
-              image: "https://andrewwendling.info/headshot.png",
+              image: "https://andrewwendling.info/headshot.jpg",
               jobTitle: "Full-Stack Software Engineer",
               description:
                 "Full-stack engineer with 5+ years shipping production SaaS — built integrations against Shopify, Stripe, Twilio, Klaviyo, Recharge, Plaid, EZPost, and Google Business Profile. Top-3% national sales background. Open to Solutions Engineer, Implementation Engineer, and Developer Relations roles.",
