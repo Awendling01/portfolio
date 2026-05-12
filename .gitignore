@@ -26,6 +26,13 @@
 
 # local agent / planning state — never commit
 .claude/
+# Local-only operational notes (positioning, accuracy table, anything
+# that's coaching not documentation). The committed CLAUDE.md keeps the
+# public-safe rules; CLAUDE.local.md holds the rest.
+CLAUDE.local.md
+# Drizzle-kit auto-generates this metadata dir; we use hand-rolled
+# migrations so the journal is empty and never needs committing.
+/drizzle/meta/
 # Root-only: ignore the local resume-prep notes dir at /case-studies/.
 # Anchored with a leading slash so it does NOT match src/lib/case-studies/
 # (that's source code, not notes).
