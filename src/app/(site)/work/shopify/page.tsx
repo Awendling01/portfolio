@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
+import BackLink from "@/components/ui/BackLink";
 import Container from "@/components/ui/Container";
 import SectionHeader from "@/components/ui/SectionHeader";
 import ScrollReveal from "@/components/ui/ScrollReveal";
@@ -27,16 +27,7 @@ export default function KioskDetailPage() {
 
   return (
     <>
-      <Container>
-        <div className="pt-[60px] pb-3">
-          <Link
-            href="/work"
-            className="mono text-[11px] uppercase tracking-[0.18em] text-[var(--text)] hover:text-[var(--accent)] transition-colors"
-          >
-            ← Back to Work
-          </Link>
-        </div>
-      </Container>
+      <BackLink href="/work">← Back to Work</BackLink>
 
       <section className="pt-4 pb-10">
         <Container>

@@ -1,7 +1,7 @@
-import Link from "next/link";
 import { desc, sql, isNull, isNotNull, and } from "drizzle-orm";
 import { getDb, hasDatabase, schema } from "@/lib/db";
 import NotConfigured from "@/components/admin/NotConfigured";
+import FilterTab from "@/components/ui/FilterTab";
 import { timeAgo } from "@/lib/format";
 import {
   markMessageRead,
@@ -86,36 +86,19 @@ export default async function MessagesPage({
       {/* Filter tabs — counts pulled in the same query as the rows so they
           stay in sync after every state transition. */}
       <div className="flex flex-wrap gap-2">
-        {FILTERS.map((f) => {
-          const active = f.key === filter;
-          const count = counts[f.key];
-          return (
-            <Link
-              key={f.key}
-              href={
-                f.key === "inbox"
-                  ? "/admin/messages"
-                  : `/admin/messages?filter=${f.key}`
-              }
-              className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full mono text-[11px] uppercase tracking-[0.18em] transition-colors ${
-                active
-                  ? "bg-[var(--accent)]/[0.12] text-[var(--accent)] border border-[var(--accent)]/40"
-                  : "border border-[var(--border)] text-[var(--text)] hover:text-white hover:border-[var(--text)]"
-              }`}
-            >
-              {f.label}
-              <span
-                className={`px-1.5 py-0.5 rounded text-[10px] tabular-nums ${
-                  active
-                    ? "bg-[var(--accent)]/[0.18]"
-                    : "bg-[var(--surface)]/80"
-                }`}
-              >
-                {count}
-              </span>
-            </Link>
-          );
-        })}
+        {FILTERS.map((f) => (
+          <FilterTab
+            key={f.key}
+            href={
+              f.key === "inbox"
+                ? "/admin/messages"
+                : `/admin/messages?filter=${f.key}`
+            }
+            active={f.key === filter}
+            label={f.label}
+            count={counts[f.key]}
+          />
+        ))}
       </div>
 
       {rows.length === 0 ? (
